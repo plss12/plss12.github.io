@@ -1,0 +1,74 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { routes, sectionHref, useTranslations, type Locale } from '@/i18n';
+import { featuredProject, projects, type Project } from '@/data/projects';
+import { profile } from '@/data/profile';
+
+interface Props {
+  locale: Locale;
+  entry: CollectionEntry<'caseStudies'>;
+}
+
+const { locale, entry } = Astro.props;
+const t = useTranslations(locale);
+const { Content } = await render(entry);
+
+const project = [featuredProject, ...projects].find((p) => p.slug === entry.data.project) as Project;
+const alternates = { es: routes.caseStudy('es', project.slug), en: routes.caseStudy('en', project.slug) };
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: entry.data.title,
+  description: entry.data.description,
+  inLanguage: locale,
+  author: { '@type': 'Person', name: profile.name, url: new URL(routes.home(locale), Astro.site).href },
+  codeRepository: project.links[0]?.href,
+};
+---
+
+<BaseLayout
+  locale={locale}
+  title={project.name}
+  description={entry.data.description}
+  alternates={alternates}
+  ogType="article"
+  schema={schema}
+>
+  <article>
+    <header class="border-b border-line">
+      <div class="container-page pt-12 pb-16 md:pt-20 md:pb-24">
+        <a href={sectionHref(locale, 'projects')} class="link text-sm text-muted">{t('cta.back')}</a>
+        <p class="mt-12 text-base font-semibold">
+          {project.name}
+          <span class="block font-normal text-muted">{project.context[locale]}</span>
+        </p>
+        <h1 class="text-display mt-6 max-w-[16ch]">{project.tagline[locale]}</h1>
+        <p class="text-lead mt-8 max-w-prose text-muted">{project.summary[locale]}</p>
+
+        <dl class="mt-12 grid max-w-2xl grid-cols-2 gap-6 border-t border-line pt-6 sm:grid-cols-3">
+          {
+            project.facts.map((fact) => (
+              <div class="flex flex-col-reverse justify-end gap-1">
+                <dt class="text-sm text-muted">{fact.label[locale]}</dt>
+                <dd class="text-subtitle">{fact.value[locale]}</dd>
+              </div>
+            ))
+          }
+        </dl>
+
+        <p class="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3">
+          {project.links.map((link) => <a href={link.href} class="link font-semibold">{link.label[locale]}</a>)}
+          <span class="text-sm text-muted">{project.stack.join(', ')}</span>
+        </p>
+      </div>
+    </header>
+
+    <div class="container-page section-space">
+      <div class="prose-case mx-auto max-w-3xl">
+        <Content />
+      </div>
+    </div>
+  </article>
+</BaseLayout>

@@ -1,0 +1,62 @@
+---
+title: pyplAI, algoritmos de decisión para juegos a un pip install
+description: Caso de estudio del TFG de Pedro Luis Soto Santos. Biblioteca open source en PyPI con Minimax, MCTS, SO-ISMCTS y MO-ISMCTS para juegos de información perfecta e imperfecta.
+lang: es
+project: pyplai
+---
+
+import MctsDiagram from '@/components/visuals/MctsDiagram.astro';
+
+## El problema
+
+Los algoritmos de búsqueda como Minimax o Monte Carlo Tree Search son la base de muchos agentes de juego, y la idea de AlphaZero. Pero al analizar el estado del arte comprobé que no había una biblioteca de Python sencilla que los reuniera, y menos aún para **juegos de información imperfecta**, en los que el agente no lo ve todo: las cartas del rival, el mazo o las piezas ocultas.
+
+El objetivo del trabajo fue crear esa biblioteca, publicarla para que cualquiera pudiera usarla y validar experimentalmente cada algoritmo.
+
+## Cuatro algoritmos, una misma interfaz
+
+pyplAI implementa cuatro algoritmos. Para usar cualquiera de ellos, basta con describir el juego mediante unos pocos métodos: obtener los movimientos, aplicar uno, saber si la partida ha terminado y quién gana.
+
+- **Minimax con poda alfa-beta**, para juegos de información perfecta como las damas.
+- **MCTS con UCT**, que en lugar de explorar todo el árbol simula partidas y se concentra en las jugadas más prometedoras.
+- **SO-ISMCTS**, que construye un único árbol desde el punto de vista del jugador y razona sobre las posibles versiones de la información oculta.
+- **MO-ISMCTS**, que mantiene un árbol por jugador y agrupa los movimientos que el rival no puede distinguir. Es el más fiel cuando hay acciones parcialmente observables.
+
+<figure>
+  <MctsDiagram locale="es" />
+</figure>
+
+Así se usa MCTS sobre cualquier juego que implemente esa interfaz:
+
+```python
+import pyplAI
+
+mcts = pyplAI.MCTS(
+    Juego.aplica_movimiento,
+    Juego.obtiene_movimientos,
+    Juego.es_estado_final,
+    Juego.gana_jugador,
+    numeroJugadores=2,
+    tiempoEjecucion=1,  # segundos de búsqueda por jugada
+)
+
+movimiento = mcts.ejecuta(juego)
+```
+
+## Ocho juegos para demostrarlo
+
+Para validar la biblioteca desarrollé ocho juegos completos, que además sirven de ejemplo de uso: tres en raya, Ultimate Tic-Tac-Toe y damas con Minimax y MCTS; escoba, blackjack y Stratego con SO-ISMCTS; y Phantom y Holjjak, con movimientos ocultos, con MO-ISMCTS.
+
+En el Stratego añadí un **algoritmo genético** que busca la mejor colocación inicial de las piezas, una decisión que el árbol de búsqueda no puede tomar por sí solo.
+
+## Resultados
+
+- Con poco tiempo de cálculo, Minimax gana a MCTS. Al dar más tiempo la ventaja se reduce hasta igualarse, porque MCTS acaba cubriendo el mismo árbol.
+- SO-ISMCTS logra una tasa de victorias muy alta contra agentes aleatorios en los juegos de información imperfecta.
+- Con las colocaciones del algoritmo genético, SO-ISMCTS gana con claridad a sí mismo con colocaciones aleatorias.
+- MO-ISMCTS iguala o supera a SO-ISMCTS en juegos con movimientos ocultos, aunque SO-ISMCTS completa alrededor de un 25 % más de iteraciones en el mismo tiempo.
+
+## Lo que aprendí
+
+- **Diseñar una API es diseñar para otros.** El reto no fue solo implementar los algoritmos, sino que alguien pueda conectarlos a su juego sin leer el código. Por eso la biblioteca incluye un manual completo y los ocho juegos de ejemplo.
+- **La búsqueda sigue siendo muy competitiva.** Lo confirmé después en [Connect-X AlphaZero](https://github.com/plss12/Connect-X-AlphaZero): los agentes basados en pyplAI superaron a PPO y Rainbow DQN, y solo AlphaZero, que combina búsqueda con una red neuronal, los superó.

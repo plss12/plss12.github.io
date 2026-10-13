@@ -1,0 +1,60 @@
+---
+title: Lunar rovers that learn to coordinate without colliding
+description: Case study of Pedro Luis Soto Santos’s Master’s thesis. Multi-agent route planning with deep reinforcement learning, a custom lunar simulator, and DDDQL and MAPPO implemented from scratch.
+lang: en
+project: lunar-rover-madrl
+---
+
+import LunarRoutes from '@/components/visuals/LunarRoutes.astro';
+import TrainingChart from '@/components/visuals/TrainingChart.astro';
+
+## The problem
+
+Building the first International Lunar Research Station, planned for 2030, will require mining a lot of material on the Moon itself. Several rovers will have to reach their mines, load the ore and carry it to a shared mixer. Planning those routes from Earth is slow and rigid: the terrain isn’t fully known, each rover only sees its surroundings, and the other rovers are moving obstacles.
+
+The goal of the thesis was to find out whether the rovers could learn to solve this **on their own**, each making its own decisions, using as little energy as possible and never colliding with each other.
+
+## The environment: a simulator built for learning
+
+No existing environment resembled the problem, so I built one on **Gymnasium**, the standard reinforcement learning library, and rendered it with Pygame.
+
+- The map is a configurable grid with small obstacles, which can be crossed at a higher energy cost, and large ones, which can leave a rover out of action.
+- Obstacles, rovers, mines and the mixer move to new positions every episode. The agent doesn’t memorise a map: it learns to move through any of them.
+- Each rover has a limited field of view and decides based on what it sees and remembers. Control is **decentralised**: there’s no central brain deciding for everyone.
+
+During development, training itself revealed what the environment was missing. Three additions made the difference:
+
+1. **A visit map.** Rovers kept getting stuck exploring areas they had already seen. With a record of visited cells, they learned to look for new ground.
+2. **Intermediate rewards.** At first nearly every reward was negative and the agent learned nothing. A small reward inspired by artificial potential fields guides it towards its goal once the goal is in sight.
+3. **Normalised observations.** Each rover only tells its own mine apart; every other mine and rover looks the same to it. That lets all rovers share the same experience, and the model works on maps of other sizes and with a different number of rovers.
+
+## Two algorithms, implemented from scratch
+
+I implemented both algorithms without reinforcement learning libraries, using only NumPy, TensorFlow and Keras, so I could adapt them to the problem.
+
+- **DDDQL (Double Dueling Deep Q-Learning).** It separates the network that picks an action from the one that evaluates it, to avoid overestimating values, and splits the network into state value and per-action advantage. It uses action masks to rule out impossible moves and an experience replay buffer shared by every rover.
+- **MAPPO (Multi-Agent PPO).** An actor-critic with centralised training and decentralised execution, the reference approach for many cooperative multi-agent problems.
+
+## Results
+
+I trained both models on 12 × 12 maps with three rovers and a three-cell field of view. The chart shows the mean reward per action throughout training, using the real data saved at every checkpoint.
+
+<figure>
+  <TrainingChart locale="en" />
+</figure>
+
+DDDQL clearly learns: it goes from negative to positive rewards and completes more episodes in fewer steps. MAPPO, on the other hand, never gets its reward above zero in 6 million steps.
+
+I then tested the DDDQL model, with random exploration switched off, on four new maps in two modes: without knowing where the goals are, and knowing them in advance. **It solved all 8 scenarios without a single collision.** This is the first one, redrawn from the real test data:
+
+<figure>
+  <LunarRoutes locale="en" />
+</figure>
+
+When the rovers know where their goals are, routes get much shorter. On this same map, the total drops from 83 to 41 steps.
+
+## What I learned
+
+- **Off-policy versus on-policy matters.** DDDQL reuses thousands of past experiences from every rover. MAPPO only learns from its current policy, and with maps that change every episode that wasn’t enough to converge. Choosing the algorithm to fit the environment matters as much as tuning it.
+- **The environment is half the work.** The three simulator improvements had more impact than any hyperparameter.
+- **Next steps.** Give each rover a “compass” that points towards its goal without revealing its exact position, train for longer, and measure how the model scales to more rovers and larger maps.

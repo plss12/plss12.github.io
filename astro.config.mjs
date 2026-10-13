@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig, fontProviders } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import mdx from '@astrojs/mdx';
 import tailwindcss from '@tailwindcss/vite';
 
 // TODO: sustituir por el dominio definitivo cuando se decida el hosting.
@@ -10,6 +11,13 @@ export default defineConfig({
   site: SITE,
   trailingSlash: 'ignore',
   devToolbar: { enabled: false },
+  markdown: {
+    // Dos temas: el CSS elige el que corresponde según prefers-color-scheme.
+    shikiConfig: {
+      themes: { light: 'github-light', dark: 'github-dark' },
+      defaultColor: false,
+    },
+  },
   i18n: {
     locales: ['es', 'en'],
     defaultLocale: 'es',
@@ -50,7 +58,10 @@ export default defineConfig({
     },
   ],
   integrations: [
+    mdx(),
     sitemap({
+      // El CV imprimible es una vista auxiliar: no se indexa.
+      filter: (page) => !/\/cv\/?$/.test(new URL(page).pathname),
       i18n: {
         defaultLocale: 'es',
         locales: { es: 'es-ES', en: 'en' },

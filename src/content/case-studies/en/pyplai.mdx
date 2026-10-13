@@ -1,0 +1,62 @@
+---
+title: pyplAI, decision-making algorithms for games one pip install away
+description: Case study of Pedro Luis Soto Santos’s Bachelor’s thesis. An open-source PyPI library with Minimax, MCTS, SO-ISMCTS and MO-ISMCTS for perfect- and imperfect-information games.
+lang: en
+project: pyplai
+---
+
+import MctsDiagram from '@/components/visuals/MctsDiagram.astro';
+
+## The problem
+
+Search algorithms such as Minimax and Monte Carlo Tree Search power many game-playing agents, and they’re the core idea behind AlphaZero. Yet when I reviewed the state of the art I found no simple Python library that brought them together, let alone one for **imperfect-information games**, where the agent can’t see everything: the opponent’s cards, the deck or hidden pieces.
+
+The goal of the thesis was to build that library, publish it so anyone could use it, and validate every algorithm experimentally.
+
+## Four algorithms, one interface
+
+pyplAI implements four algorithms. To use any of them, you only need to describe your game through a few methods: list the moves, apply one, check whether the game is over and who won.
+
+- **Minimax with alpha-beta pruning**, for perfect-information games such as checkers.
+- **MCTS with UCT**, which instead of exploring the whole tree simulates games and focuses on the most promising moves.
+- **SO-ISMCTS**, which builds a single tree from the player’s point of view and reasons over the possible versions of the hidden information.
+- **MO-ISMCTS**, which keeps one tree per player and groups the moves an opponent can’t tell apart. It’s the most faithful option when actions are only partly observable.
+
+<figure>
+  <MctsDiagram locale="en" />
+</figure>
+
+This is how MCTS runs on any game that implements that interface (the API uses Spanish names):
+
+```python
+import pyplAI
+
+mcts = pyplAI.MCTS(
+    Juego.aplica_movimiento,    # apply a move
+    Juego.obtiene_movimientos,  # list legal moves
+    Juego.es_estado_final,      # is the game over?
+    Juego.gana_jugador,         # did this player win?
+    numeroJugadores=2,
+    tiempoEjecucion=1,          # search time per move, in seconds
+)
+
+movimiento = mcts.ejecuta(juego)
+```
+
+## Eight games to prove it
+
+To validate the library I built eight complete games, which double as usage examples: tic-tac-toe, Ultimate Tic-Tac-Toe and checkers with Minimax and MCTS; escoba, blackjack and Stratego with SO-ISMCTS; and Phantom and Holjjak, which have hidden moves, with MO-ISMCTS.
+
+For Stratego I added a **genetic algorithm** that searches for the best initial piece layout, a decision the search tree can’t make on its own.
+
+## Results
+
+- With little computing time, Minimax beats MCTS. With more time the gap closes until they’re even, because MCTS ends up covering the same tree.
+- SO-ISMCTS achieves a very high win rate against random agents in imperfect-information games.
+- With the genetic algorithm’s layouts, SO-ISMCTS clearly beats itself playing with random layouts.
+- MO-ISMCTS matches or beats SO-ISMCTS in games with hidden moves, although SO-ISMCTS completes around 25% more iterations in the same time.
+
+## What I learned
+
+- **Designing an API means designing for others.** The challenge wasn’t only implementing the algorithms, but letting someone plug them into their game without reading the source. That’s why the library ships with a full manual and the eight example games.
+- **Search is still highly competitive.** I confirmed it later in [Connect-X AlphaZero](https://github.com/plss12/Connect-X-AlphaZero): the pyplAI-based agents beat PPO and Rainbow DQN, and only AlphaZero, which pairs search with a neural network, beat them.
