@@ -1,0 +1,50 @@
+---
+import { sectionIds, useTranslations, type Locale } from '@/i18n';
+import { formatMonth, yearRange } from '@/i18n/format';
+import { techExperience, internationalSummary } from '@/data/experience';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const id = sectionIds.experience[locale];
+---
+
+<section id={id} class="section-space" aria-labelledby={`${id}-title`}>
+  <div class="container-page grid gap-12 lg:grid-cols-12 lg:gap-16">
+    <h2 id={`${id}-title`} class="text-title lg:col-span-4">{t('experience.title')}</h2>
+
+    <ol class="grid gap-12 lg:col-span-8" role="list">
+      {
+        techExperience.map((role) => (
+          <li class="grid gap-2 md:grid-cols-[9.5rem_1fr] md:gap-x-10">
+            <p class="text-sm text-muted tabular-nums md:pt-1">
+              <time datetime={role.start}>{formatMonth(role.start, locale)}</time>
+              {' – '}
+              <time datetime={role.end}>{formatMonth(role.end, locale)}</time>
+            </p>
+            <div>
+              <h3 class="text-xl leading-snug font-semibold [font-stretch:90%]">
+                {role.title[locale]}, {role.company}
+              </h3>
+              <p class="text-sm text-muted">{role.location[locale]}</p>
+              <ul class="mt-4 grid max-w-prose gap-3 text-muted" role="list">
+                {(role.featured ? role.highlights : role.highlights.slice(0, 1)).map((h) => (
+                  <li>{h[locale]}</li>
+                ))}
+              </ul>
+            </div>
+          </li>
+        ))
+      }
+      <li class="grid gap-2 border-t border-line pt-10 md:grid-cols-[9.5rem_1fr] md:gap-x-10">
+        <p class="text-sm text-muted tabular-nums md:pt-1">
+          {yearRange(internationalSummary.period.start, internationalSummary.period.end)}
+        </p>
+        <p class="max-w-prose text-muted">{internationalSummary.text[locale]}</p>
+      </li>
+    </ol>
+  </div>
+</section>

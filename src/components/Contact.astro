@@ -1,0 +1,33 @@
+---
+import { routes, sectionIds, useTranslations, type Locale } from '@/i18n';
+import { profile } from '@/data/profile';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const id = sectionIds.contact[locale];
+---
+
+<section id={id} class="section-space bg-stage text-stage-ink" aria-labelledby={`${id}-title`}>
+  <div class="container-page">
+    <h2 id={`${id}-title`} class="text-display">{t('contact.title')}</h2>
+    <p class="text-lead mt-8 max-w-[38rem] text-stage-muted">{t('contact.text')}</p>
+
+    <p class="mt-12">
+      <a
+        href={`mailto:${profile.links.email}`}
+        class="link text-stage-ink text-[clamp(1.375rem,6.2vw,4rem)] leading-tight font-bold tracking-[-0.015em]"
+        >{profile.links.email}</a
+      >
+    </p>
+
+    <p class="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4">
+      <a href={routes.cvPdf(locale)} download class="btn bg-stage-ink text-stage">{t('cta.downloadCv')}</a>
+      <a href={profile.links.linkedin} class="link font-semibold">LinkedIn</a>
+      <a href={profile.links.github} class="link font-semibold">GitHub</a>
+    </p>
+  </div>
+</section>

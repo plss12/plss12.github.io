@@ -8,6 +8,8 @@ export interface Role {
   start: string;
   end: string;
   highlights: Localized[];
+  /** Si es false, en la portada solo se muestra el primer logro. */
+  featured?: boolean;
 }
 
 export const techExperience: Role[] = [
@@ -17,6 +19,7 @@ export const techExperience: Role[] = [
     location: { es: 'Sevilla', en: 'Seville, Spain' },
     start: '2023-06',
     end: '2025-02',
+    featured: true,
     highlights: [
       {
         es: 'Modernización de flujos de datos para un gran cliente bancario, sobre uno de los mayores entornos Oracle Big Data del mundo, como soporte de modelos de riesgo basados en IA.',
@@ -47,7 +50,10 @@ export const techExperience: Role[] = [
   },
 ];
 
-/** Etapa planificada para alcanzar un inglés avanzado; se muestra breve y en positivo. */
+/**
+ * Etapa planificada para alcanzar un inglés avanzado. En la portada se resume en una línea
+ * (ver `internationalSummary`); el detalle se mantiene para el CV.
+ */
 export const internationalExperience: Role[] = [
   {
     company: 'InterWay',
@@ -76,3 +82,11 @@ export const internationalExperience: Role[] = [
     ],
   },
 ];
+
+export const internationalSummary = {
+  period: { start: '2025-03', end: '2026-08' },
+  text: {
+    es: 'Etapa internacional planificada para llevar mi inglés a nivel C1: vivir y trabajar en Brisbane (Australia) en atención al cliente con Accor y, después, monitor de inmersión lingüística con InterWay.',
+    en: 'A planned international stage to take my English to C1: living and working in Brisbane, Australia, in a customer-facing role with Accor, then as an English immersion counselor with InterWay.',
+  } satisfies Localized,
+};

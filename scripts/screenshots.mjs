@@ -27,6 +27,18 @@ for (const theme of themes) {
     for (const route of routes) {
       await page.goto(new URL(route, base).href, { waitUntil: 'networkidle' });
       await page.evaluate(() => document.fonts.ready);
+      // Recorre la página para que carguen las imágenes diferidas antes de la captura completa.
+      if (fullPage) {
+        await page.evaluate(async () => {
+          for (let y = 0; y < document.body.scrollHeight; y += window.innerHeight / 2) {
+            window.scrollTo(0, y);
+            await new Promise((r) => setTimeout(r, 60));
+          }
+          window.scrollTo(0, 0);
+        });
+        await page.waitForLoadState('networkidle');
+        await page.waitForTimeout(800);
+      }
       const slug = route.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '') || 'home';
       const file = join(out, `${slug}-${vp.name}-${theme}.png`);
       await page.screenshot({ path: file, fullPage });

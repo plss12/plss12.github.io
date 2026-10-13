@@ -1,0 +1,55 @@
+---
+import { routes, sectionIds, useTranslations, type Locale } from '@/i18n';
+import { capabilities, toolkit } from '@/data/capabilities';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const id = sectionIds.capabilities[locale];
+---
+
+<section id={id} class="section-space bg-surface" aria-labelledby={`${id}-title`}>
+  <div class="container-page grid gap-12 lg:grid-cols-12 lg:gap-16">
+    <h2 id={`${id}-title`} class="text-title lg:col-span-4">{t('capabilities.title')}</h2>
+
+    <div class="lg:col-span-8">
+      <ul class="grid gap-10" role="list">
+        {
+          capabilities.map((item) => (
+            <li class="grid gap-3 border-t border-line pt-8 first:border-t-0 first:pt-0 md:grid-cols-[1fr_auto] md:gap-x-10">
+              <div>
+                <h3 class="text-xl leading-snug font-semibold [font-stretch:90%]">{item.title[locale]}</h3>
+                <p class="mt-2 max-w-prose text-muted">{item.description[locale]}</p>
+              </div>
+              <p class="text-sm md:max-w-[14rem] md:pt-1 md:text-right">
+                <span class="sr-only">{t('capabilities.evidence')}: </span>
+                {item.evidence.map((ev) => {
+                  const href = ev.caseStudy ? routes.caseStudy(locale, ev.caseStudy) : ev.href;
+                  return (
+                    <span class="block">
+                      {href ? (
+                        <a href={href} class="link">
+                          {ev.label[locale]}
+                        </a>
+                      ) : (
+                        <span class="text-muted">{ev.label[locale]}</span>
+                      )}
+                    </span>
+                  );
+                })}
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="mt-14 border-t border-line pt-8 text-muted">
+        <span class="font-semibold text-ink">{t('capabilities.also')}:</span>{' '}
+        {toolkit[locale].join(', ')}.
+      </p>
+    </div>
+  </div>
+</section>

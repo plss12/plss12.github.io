@@ -33,8 +33,8 @@ export const profile = {
     {
       name: { es: 'Inglés', en: 'English' },
       level: {
-        es: 'C1 (Cambridge). Un año viviendo y trabajando en Australia.',
-        en: 'C1 (Cambridge). A year living and working in Australia.',
+        es: 'C1 (Cambridge). He vivido y trabajado en Australia.',
+        en: 'C1 (Cambridge). I’ve lived and worked in Australia.',
       },
     },
   ] satisfies { name: Localized; level: Localized }[],

@@ -1,0 +1,69 @@
+---
+import { Image } from 'astro:assets';
+import { sectionIds, useTranslations, type Locale } from '@/i18n';
+import { formatMonth } from '@/i18n/format';
+import { education } from '@/data/education';
+import { profile } from '@/data/profile';
+import graduation from '@/assets/photos/pedro-graduacion.jpg';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const id = sectionIds.education[locale];
+---
+
+<section id={id} class="section-space border-t border-line" aria-labelledby={`${id}-title`}>
+  <div class="container-page grid gap-12 lg:grid-cols-12 lg:gap-16">
+    <div class="lg:col-span-4">
+      <h2 id={`${id}-title`} class="text-title">{t('education.title')}</h2>
+      <Image
+        src={graduation}
+        alt={t('education.photoAlt')}
+        widths={[320, 480, 640]}
+        sizes="(min-width: 64rem) 22rem, 60vw"
+        quality={75}
+        class="mt-10 aspect-[4/5] w-3/5 max-w-[22rem] rounded-2xl object-cover sm:w-2/5 lg:w-full"
+      />
+    </div>
+
+    <div class="lg:col-span-8">
+      <ol class="grid gap-12" role="list">
+        {
+          education.map((degree) => (
+            <li class="grid gap-2 md:grid-cols-[9.5rem_1fr] md:gap-x-10">
+              <p class="text-sm text-muted tabular-nums md:pt-1">
+                <time datetime={degree.date}>{formatMonth(degree.date, locale)}</time>
+              </p>
+              <div>
+                <h3 class="text-xl leading-snug font-semibold [font-stretch:90%]">{degree.title[locale]}</h3>
+                <p class="text-sm text-muted">{degree.school[locale]}</p>
+                <ul class="mt-4 grid max-w-prose gap-3 text-muted" role="list">
+                  {degree.highlights.map((h) => (
+                    <li>{h[locale]}</li>
+                  ))}
+                </ul>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="mt-14 grid gap-2 border-t border-line pt-10 md:grid-cols-[9.5rem_1fr] md:gap-x-10">
+        <h3 class="text-sm text-muted md:pt-1">{t('languages.title')}</h3>
+        <dl class="grid gap-3">
+          {
+            profile.languages.map((lang) => (
+              <div>
+                <dt class="inline font-semibold">{lang.name[locale]}:</dt>{' '}
+                <dd class="inline text-muted">{lang.level[locale]}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
