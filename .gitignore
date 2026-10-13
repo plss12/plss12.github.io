@@ -1,0 +1,18 @@
+# Material de contexto personal (CV original, exportaciones, notas privadas)
+contexto/
+
+# Dependencias y build
+node_modules/
+dist/
+.astro/
+
+# Entorno y sistema
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+npm-debug.log*
+
+# Configuración local de Claude Code
+.claude/settings.local.json

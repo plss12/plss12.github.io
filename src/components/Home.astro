@@ -1,0 +1,142 @@
+---
+// Estructura semántica de la portada. El diseño visual se aplica en la fase de diseño.
+import { homePath, htmlLang, useTranslations, type Locale } from '@/i18n';
+import { profile } from '@/data/profile';
+import { techExperience, internationalExperience, type Role } from '@/data/experience';
+import { education } from '@/data/education';
+import { projects, kaggleProjects } from '@/data/projects';
+import { skills } from '@/data/skills';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const otherLocale: Locale = locale === 'es' ? 'en' : 'es';
+
+const monthFormat = new Intl.DateTimeFormat(htmlLang[locale], { month: 'short', year: 'numeric', timeZone: 'UTC' });
+const formatMonth = (iso: string) => monthFormat.format(new Date(`${iso}-01T00:00:00Z`));
+const period = (role: Role) => `${formatMonth(role.start)} – ${formatMonth(role.end)}`;
+---
+
+<header>
+  <nav aria-label={locale === 'es' ? 'Principal' : 'Main'}>
+    <ul>
+      <li><a href="#experiencia">{t('nav.experience')}</a></li>
+      <li><a href="#proyectos">{t('nav.projects')}</a></li>
+      <li><a href="#formacion">{t('nav.education')}</a></li>
+      <li><a href="#habilidades">{t('nav.skills')}</a></li>
+      <li><a href="#contacto">{t('nav.contact')}</a></li>
+    </ul>
+  </nav>
+  <a href={homePath(otherLocale)} hreflang={htmlLang[otherLocale]} lang={htmlLang[otherLocale]} aria-label={t('lang.switchLabel')}>
+    {t('lang.switch')}
+  </a>
+</header>
+
+<main id="main">
+  <section aria-labelledby="intro">
+    <h1 id="intro">{profile.name}</h1>
+    <p>{profile.role[locale]}</p>
+    <p>{profile.summary[locale]}</p>
+    <p>{profile.location[locale]} · {profile.workMode[locale]}</p>
+  </section>
+
+  <section id="experiencia" aria-labelledby="experiencia-h">
+    <h2 id="experiencia-h">{t('nav.experience')}</h2>
+    {
+      techExperience.map((role) => (
+        <article>
+          <h3>{role.title[locale]} · {role.company}</h3>
+          <p>{role.location[locale]} · {period(role)}</p>
+          <ul>
+            {role.highlights.map((h) => (
+              <li>{h[locale]}</li>
+            ))}
+          </ul>
+        </article>
+      ))
+    }
+    <h3>{t('section.international')}</h3>
+    <ul>
+      {
+        internationalExperience.map((role) => (
+          <li>
+            {role.title[locale]} · {role.company} · {role.location[locale]} · {period(role)}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section id="proyectos" aria-labelledby="proyectos-h">
+    <h2 id="proyectos-h">{t('nav.projects')}</h2>
+    {
+      [...projects, ...kaggleProjects].map((project) => (
+        <article>
+          <h3>{project.name}</h3>
+          {project.context && <p>{project.context[locale]}</p>}
+          <p>{project.summary[locale]}</p>
+          {project.highlights.length > 0 && (
+            <ul>
+              {project.highlights.map((h) => (
+                <li>{h[locale]}</li>
+              ))}
+            </ul>
+          )}
+          <p>{project.stack.join(' · ')}</p>
+          <p>
+            {project.links.map((link) => (
+              <a href={link.href}>{link.label}</a>
+            ))}
+          </p>
+        </article>
+      ))
+    }
+  </section>
+
+  <section id="formacion" aria-labelledby="formacion-h">
+    <h2 id="formacion-h">{t('nav.education')}</h2>
+    {
+      education.map((degree) => (
+        <article>
+          <h3>{degree.title[locale]}</h3>
+          <p>{degree.school[locale]} · {formatMonth(degree.date)}</p>
+          <ul>
+            {degree.highlights.map((h) => (
+              <li>{h[locale]}</li>
+            ))}
+          </ul>
+        </article>
+      ))
+    }
+  </section>
+
+  <section id="habilidades" aria-labelledby="habilidades-h">
+    <h2 id="habilidades-h">{t('nav.skills')}</h2>
+    <dl>
+      {
+        skills.map((group) => (
+          <div>
+            <dt>{group.label[locale]}</dt>
+            <dd>{group.items.join(' · ')}</dd>
+          </div>
+        ))
+      }
+      <div>
+        <dt>{locale === 'es' ? 'Idiomas' : 'Languages'}</dt>
+        <dd>{profile.languages.map((l) => `${l.name[locale]} (${l.level[locale]})`).join(' · ')}</dd>
+      </div>
+    </dl>
+  </section>
+</main>
+
+<footer id="contacto">
+  <h2>{t('nav.contact')}</h2>
+  <ul>
+    <li><a href={`mailto:${profile.links.email}`}>{profile.links.email}</a></li>
+    <li><a href={profile.links.github}>GitHub</a></li>
+    <li><a href={profile.links.linkedin}>LinkedIn</a></li>
+  </ul>
+</footer>
