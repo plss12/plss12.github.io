@@ -1,0 +1,24 @@
+---
+import { useTranslations, type Locale } from '@/i18n';
+import { highlights } from '@/data/highlights';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<section aria-label={t('proofs.label')} class="border-b border-line">
+  <ul class="container-page grid gap-10 py-14 md:grid-cols-3 md:gap-8 md:py-20" role="list">
+    {
+      highlights.map((item) => (
+        <li>
+          <p class="text-subtitle">{item.value[locale]}</p>
+          <p class="mt-2 max-w-[28ch] text-base text-muted">{item.context[locale]}</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>

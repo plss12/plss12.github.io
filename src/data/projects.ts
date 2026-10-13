@@ -1,121 +1,134 @@
 import type { Localized } from '@/i18n';
 
 export interface ProjectLink {
-  label: string;
+  label: Localized;
   href: string;
 }
 
-export interface Project {
-  name: string;
-  /** Contexto académico o de competición, si lo hay. */
-  context?: Localized;
-  summary: Localized;
-  highlights: Localized[];
-  stack: string[];
-  links: ProjectLink[];
+export interface ProjectFact {
+  value: Localized;
+  label: Localized;
 }
 
-/** Proyectos destacados, por orden de importancia. */
+/** Pieza visual que acompaña al proyecto en la portada. */
+export type ProjectVisual = 'lunar-simulator' | 'mcts-diagram' | 'connect4-board';
+
+export interface Project {
+  /** Identificador estable; si tiene caso de estudio, es también su slug. */
+  slug: string;
+  name: string;
+  /** Contexto académico o de competición. */
+  context: Localized;
+  /** Frase de resultado, en el tono de un titular. */
+  tagline: Localized;
+  summary: Localized;
+  facts: ProjectFact[];
+  stack: string[];
+  links: ProjectLink[];
+  visual: ProjectVisual;
+  caseStudy: boolean;
+}
+
+const github = { es: 'Código en GitHub', en: 'Code on GitHub' } satisfies Localized;
+
+/** El TFM: proyecto protagonista de la portada. */
+export const featuredProject: Project = {
+  slug: 'lunar-rover-madrl',
+  name: 'Lunar-Rover-MADRL',
+  context: {
+    es: 'Trabajo Fin de Máster. Matrícula de Honor.',
+    en: 'Master’s thesis. Highest honours.',
+  },
+  tagline: {
+    es: 'Rovers lunares que aprenden a coordinarse sin chocar.',
+    en: 'Lunar rovers that learn to coordinate without colliding.',
+  },
+  summary: {
+    es: 'Un sistema de planificación de rutas multiagente con aprendizaje por refuerzo profundo, como alternativa a la planificación centralizada. Los rovers exploran, encuentran su mina, transportan el mineral y evitan obstáculos y entre sí, cada uno con su propia visión del entorno. Diseñé el simulador e implementé desde cero DDDQL y MAPPO.',
+    en: 'A multi-agent route-planning system built on deep reinforcement learning, as an alternative to centralised planning. The rovers explore, find their mine, carry the ore and avoid obstacles and each other, each one with its own view of the environment. I designed the simulator and implemented DDDQL and MAPPO from scratch.',
+  },
+  facts: [
+    { value: { es: '8 de 8', en: '8 of 8' }, label: { es: 'escenarios de prueba resueltos', en: 'test scenarios solved' } },
+    { value: { es: '0', en: '0' }, label: { es: 'colisiones entre rovers', en: 'collisions between rovers' } },
+    { value: { es: '3,75 M', en: '3.75M' }, label: { es: 'pasos de entrenamiento', en: 'training steps' } },
+  ],
+  stack: ['Python', 'TensorFlow', 'Keras', 'Gymnasium', 'Pygame'],
+  links: [{ label: github, href: 'https://github.com/plss12/Lunar-Rover-MADRL' }],
+  visual: 'lunar-simulator',
+  caseStudy: true,
+};
+
+/** Proyectos destacados que acompañan al TFM. */
 export const projects: Project[] = [
   {
-    name: 'Lunar-Rover-MADRL',
-    context: {
-      es: 'Trabajo Fin de Máster · Matrícula de Honor',
-      en: 'Master’s thesis · Highest honours',
-    },
-    summary: {
-      es: 'Planificación de rutas multiagente con aprendizaje por refuerzo profundo para rovers lunares que recogen y transportan minerales, como alternativa a la planificación centralizada.',
-      en: 'Multi-agent route planning with deep reinforcement learning for lunar rovers that collect and transport minerals, as an alternative to centralised planning.',
-    },
-    highlights: [
-      {
-        es: 'Simulador lunar propio con mapas, obstáculos y número de agentes configurables y aleatorios.',
-        en: 'Custom lunar simulator with configurable, randomised maps, obstacles and agent counts.',
-      },
-      {
-        es: 'DDDQL (Double Dueling DQN) y MAPPO implementados desde cero.',
-        en: 'DDDQL (Double Dueling DQN) and MAPPO implemented from scratch.',
-      },
-      {
-        es: 'DDDQL resuelve los escenarios de prueba con rutas eficientes y cero colisiones entre agentes.',
-        en: 'DDDQL solves the test scenarios with efficient routes and zero collisions between agents.',
-      },
-    ],
-    stack: ['Python', 'TensorFlow', 'Keras', 'Gymnasium', 'Pygame'],
-    links: [{ label: 'GitHub', href: 'https://github.com/plss12/Lunar-Rover-MADRL' }],
-  },
-  {
-    name: 'Connect-X-AlphaZero',
-    context: { es: 'Competición Kaggle ConnectX', en: 'Kaggle ConnectX competition' },
-    summary: {
-      es: 'Agentes de IA para Conecta 4 que comparan búsqueda clásica, RL model-free y AlphaZero.',
-      en: 'AI agents for Connect 4 benchmarking classic search, model-free RL and AlphaZero.',
-    },
-    highlights: [
-      {
-        es: 'AlphaZero implementado desde cero: top 10 global en la clasificación de Kaggle.',
-        en: 'AlphaZero built from scratch: global top 10 on the Kaggle leaderboard.',
-      },
-      {
-        es: 'Comparativa con Rainbow DQN, PPO, MCTS y Minimax, en la que la búsqueda clásica supera al RL model-free.',
-        en: 'Benchmarked against Rainbow DQN, PPO, MCTS and Minimax, where classic search beats model-free RL.',
-      },
-    ],
-    stack: ['Python', 'PyTorch', 'Tianshou', 'pyplAI'],
-    links: [{ label: 'GitHub', href: 'https://github.com/plss12/Connect-X-AlphaZero' }],
-  },
-  {
+    slug: 'pyplai',
     name: 'pyplAI',
     context: {
-      es: 'Trabajo Fin de Grado · Matrícula de Honor',
-      en: 'Bachelor’s thesis · Highest honours',
+      es: 'Trabajo Fin de Grado. Matrícula de Honor.',
+      en: 'Bachelor’s thesis. Highest honours.',
+    },
+    tagline: {
+      es: 'Algoritmos de decisión para juegos, a un pip install.',
+      en: 'Decision-making algorithms for games, one pip install away.',
     },
     summary: {
-      es: 'Biblioteca open source publicada en PyPI con algoritmos de búsqueda para juegos de información perfecta e imperfecta.',
-      en: 'Open-source library published on PyPI with search algorithms for perfect- and imperfect-information games.',
+      es: 'Biblioteca open source publicada en PyPI con Minimax, MCTS y dos variantes de ISMCTS para juegos de información imperfecta, en los que el agente no ve todo, como las cartas del rival.',
+      en: 'An open-source library on PyPI with Minimax, MCTS and two ISMCTS variants for imperfect-information games, where the agent can’t see everything, like an opponent’s cards.',
     },
-    highlights: [
-      {
-        es: 'Minimax con poda alfa-beta, MCTS-UCT, SO-ISMCTS y MO-ISMCTS.',
-        en: 'Minimax with alpha-beta pruning, MCTS-UCT, SO-ISMCTS and MO-ISMCTS.',
-      },
-      {
-        es: 'Siete juegos de ejemplo y análisis estadístico comparativo entre algoritmos.',
-        en: 'Seven example games and a comparative statistical analysis of the algorithms.',
-      },
-      {
-        es: 'Algoritmo genético para la configuración inicial del Stratego, que mejora el rendimiento de SO-ISMCTS.',
-        en: 'Genetic algorithm for Stratego’s initial setup that improves SO-ISMCTS performance.',
-      },
+    facts: [
+      { value: { es: '4', en: '4' }, label: { es: 'algoritmos de búsqueda', en: 'search algorithms' } },
+      { value: { es: '8', en: '8' }, label: { es: 'juegos de ejemplo', en: 'example games' } },
     ],
     stack: ['Python', 'PyPI'],
     links: [
-      { label: 'GitHub', href: 'https://github.com/plss12/pyplAI' },
-      { label: 'PyPI', href: 'https://pypi.org/project/pyplAI/' },
+      { label: github, href: 'https://github.com/plss12/pyplAI' },
+      { label: { es: 'Ver en PyPI', en: 'View on PyPI' }, href: 'https://pypi.org/project/pyplAI/' },
     ],
+    visual: 'mcts-diagram',
+    caseStudy: true,
+  },
+  {
+    slug: 'connect-x-alphazero',
+    name: 'Connect-X AlphaZero',
+    context: {
+      es: 'Competición ConnectX de Kaggle.',
+      en: 'Kaggle ConnectX competition.',
+    },
+    tagline: {
+      es: 'AlphaZero desde cero. Top 10 mundial.',
+      en: 'AlphaZero from scratch. Global top 10.',
+    },
+    summary: {
+      es: 'Agentes para Conecta 4 que comparan búsqueda clásica, Rainbow DQN, PPO y AlphaZero. AlphaZero, que combina una red neuronal con MCTS, gana a todos y compite con los mejores de la clasificación.',
+      en: 'Connect 4 agents benchmarking classic search, Rainbow DQN, PPO and AlphaZero. AlphaZero, which pairs a neural network with MCTS, beats them all and competes with the best on the leaderboard.',
+    },
+    facts: [
+      { value: { es: 'Top 10', en: 'Top 10' }, label: { es: 'en la clasificación global', en: 'on the global leaderboard' } },
+      { value: { es: '5', en: '5' }, label: { es: 'familias de agentes comparadas', en: 'agent families benchmarked' } },
+    ],
+    stack: ['Python', 'PyTorch', 'Tianshou', 'pyplAI'],
+    links: [{ label: github, href: 'https://github.com/plss12/Connect-X-AlphaZero' }],
+    visual: 'connect4-board',
+    caseStudy: false,
   },
 ];
 
-/** Proyectos de ML aplicado, mostrados en un bloque compacto. */
-export const kaggleProjects: Project[] = [
+export interface KaggleResult {
+  name: string;
+  result: Localized;
+  href: string;
+}
+
+/** Resultados de ML aplicado, en una línea compacta. */
+export const kaggleResults: KaggleResult[] = [
   {
-    name: 'Store-Sales-TSF',
-    summary: {
-      es: 'Predicción de ventas diarias con un ensemble de XGBoost y LightGBM y feature engineering de lags y medias móviles. Top 5 %.',
-      en: 'Daily sales forecasting with an XGBoost + LightGBM ensemble and lag/rolling-mean feature engineering. Top 5%.',
-    },
-    highlights: [],
-    stack: ['XGBoost', 'LightGBM', 'Pandas'],
-    links: [{ label: 'GitHub', href: 'https://github.com/plss12/Store-Sales-TSF' }],
+    name: 'Store Sales',
+    result: { es: 'top 5 % en predicción de series temporales', en: 'top 5% in time-series forecasting' },
+    href: 'https://github.com/plss12/Store-Sales-TSF',
   },
   {
-    name: 'Spaceship-AutoML',
-    summary: {
-      es: 'Pipeline de clasificación end-to-end con AutoGluon. 81 % de accuracy, top 2 %.',
-      en: 'End-to-end classification pipeline with AutoGluon. 81% accuracy, top 2%.',
-    },
-    highlights: [],
-    stack: ['AutoGluon', 'scikit-learn', 'Pandas'],
-    links: [{ label: 'GitHub', href: 'https://github.com/plss12/Spaceship-AutoML' }],
+    name: 'Spaceship Titanic',
+    result: { es: 'top 2 % con AutoML', en: 'top 2% with AutoML' },
+    href: 'https://github.com/plss12/Spaceship-AutoML',
   },
 ];

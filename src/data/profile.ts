@@ -2,26 +2,46 @@ import type { Localized } from '@/i18n';
 
 export const profile = {
   name: 'Pedro Luis Soto Santos',
-  role: { es: 'Ingeniero de IA · Python', en: 'AI Engineer · Python' } satisfies Localized,
-  location: {
-    es: 'España · abierto a reubicación en Europa',
-    en: 'Spain · open to relocation within Europe',
+  shortName: 'Pedro Luis Soto',
+  role: { es: 'Ingeniero de IA', en: 'AI Engineer' } satisfies Localized,
+  /** Titular de la cabecera: resume el hilo conductor del perfil (agentes que aprenden a decidir). */
+  headline: {
+    es: 'Enseño a las máquinas a decidir.',
+    en: 'I teach machines to make decisions.',
+  } satisfies Localized,
+  intro: {
+    es: 'Soy Pedro, ingeniero de IA especializado en Python. Diseño agentes que aprenden por refuerzo, desde rovers lunares que se coordinan sin chocar hasta un AlphaZero entre los diez mejores de Kaggle.',
+    en: 'I’m Pedro, an AI engineer focused on Python. I build agents that learn through reinforcement, from lunar rovers that coordinate without colliding to an AlphaZero in Kaggle’s global top 10.',
   } satisfies Localized,
   summary: {
-    es: 'Ingeniero de software con máster en Inteligencia Artificial y más de dos años de experiencia en entornos empresariales de datos y desarrollo. Me interesan el aprendizaje por refuerzo, los agentes y los sistemas basados en LLMs, y busco aplicarlos en proyectos de IA en empresas tecnológicas innovadoras.',
-    en: 'Software engineer with a Master’s in Artificial Intelligence and over two years of experience in enterprise data and software environments. I’m interested in reinforcement learning, agents and LLM-based systems, and I’m looking to apply them to AI projects at innovative tech companies.',
+    es: 'Ingeniero de software con máster en Inteligencia Artificial y más de dos años de experiencia en datos y desarrollo en entornos empresariales. Me especializo en agentes y aprendizaje por refuerzo, con experiencia en llevar datos a producción para modelos de IA.',
+    en: 'Software engineer with a Master’s in Artificial Intelligence and over two years of experience in enterprise data and software. I specialise in agents and reinforcement learning, with hands-on experience delivering production data for AI models.',
+  } satisfies Localized,
+  location: {
+    es: 'España. Abierto a trabajar en cualquier país de Europa.',
+    en: 'Spain. Open to working anywhere in Europe.',
   } satisfies Localized,
   workMode: {
-    es: 'Modalidad híbrida o presencial',
+    es: 'Híbrido o presencial',
     en: 'Hybrid or on-site',
   } satisfies Localized,
   languages: [
-    { name: { es: 'Español', en: 'Spanish' }, level: { es: 'Nativo', en: 'Native' } },
-    { name: { es: 'Inglés', en: 'English' }, level: { es: 'C1 · Cambridge', en: 'C1 · Cambridge' } },
+    {
+      name: { es: 'Español', en: 'Spanish' },
+      level: { es: 'Nativo', en: 'Native' },
+    },
+    {
+      name: { es: 'Inglés', en: 'English' },
+      level: {
+        es: 'C1 (Cambridge). Un año viviendo y trabajando en Australia.',
+        en: 'C1 (Cambridge). A year living and working in Australia.',
+      },
+    },
   ] satisfies { name: Localized; level: Localized }[],
   links: {
     email: 'pepoluis712@gmail.com',
     github: 'https://github.com/plss12',
     linkedin: 'https://www.linkedin.com/in/plss12/',
+    repo: 'https://github.com/plss12/plss12.github.io',
   },
 } as const;

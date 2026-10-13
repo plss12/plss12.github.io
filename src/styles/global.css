@@ -1,3 +1,182 @@
 @import "tailwindcss";
 
-/* Los tokens de diseño (color, tipografía, espaciado) se definen en la fase de diseño. */
+/*
+ * Tokens de diseño. Paleta monocroma sin acento: el énfasis se consigue con
+ * tamaño y peso, no con color. El modo oscuro sigue la preferencia del sistema.
+ */
+:root {
+  color-scheme: light dark;
+
+  --bg: #ffffff;
+  --surface: #f2f2f2;
+  --ink: #000000;
+  --muted: #5e5e5e;
+  --line: #e0e0e0;
+
+  /* La cabecera es oscura en ambos temas (la foto tiene fondo negro). */
+  --stage: #000000;
+  --stage-ink: #f5f5f5;
+  --stage-muted: #a1a1a1;
+
+  --header-h: 3.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #000000;
+    --surface: #161616;
+    --ink: #f5f5f5;
+    --muted: #a1a1a1;
+    --line: #2a2a2a;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-stage: var(--stage);
+  --color-stage-ink: var(--stage-ink);
+  --color-stage-muted: var(--stage-muted);
+
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+}
+
+@theme {
+  --container-page: 75rem;
+  --container-prose: 65ch;
+}
+
+/* Escala tipográfica (una sola familia; la personalidad la da el eje de anchura). */
+@utility text-display {
+  font-size: clamp(3rem, 9vw, 7.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  font-stretch: 75%;
+  text-wrap: balance;
+}
+
+@utility text-title {
+  font-size: clamp(2.25rem, 5vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.015em;
+  font-weight: 700;
+  font-stretch: 85%;
+  text-wrap: balance;
+}
+
+@utility text-subtitle {
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+  font-stretch: 90%;
+  text-wrap: balance;
+}
+
+@utility text-lead {
+  font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+@utility container-page {
+  width: 100%;
+  max-width: var(--container-page);
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+
+  @media (width >= 48rem) {
+    padding-inline: 2rem;
+  }
+}
+
+@utility section-space {
+  padding-block: clamp(5rem, 12vw, 9rem);
+}
+
+@layer base {
+  html {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 100%;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    scroll-padding-top: calc(var(--header-h) + 1rem);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    min-height: 100dvh;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  :focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  a {
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+}
+
+/* Enlace de texto: subrayado discreto que se refuerza al pasar por encima. */
+@utility link {
+  text-decoration-line: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+  transition: text-decoration-color 150ms ease;
+
+  &:hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+/* Botón principal: píldora sólida que se invierte con el tema. */
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding-inline: 1.375rem;
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 150ms ease;
+
+  &:hover {
+    opacity: 0.82;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,68 @@
+---
+import { htmlLang, otherLocale, routes, sectionHref, useTranslations, type Locale, type Localized } from '@/i18n';
+import { profile } from '@/data/profile';
+
+interface Props {
+  locale: Locale;
+  alternates: Localized;
+  /** En la portada la barra flota sobre la cabecera oscura. */
+  overlay?: boolean;
+}
+
+const { locale, alternates, overlay = false } = Astro.props;
+const t = useTranslations(locale);
+const other = otherLocale(locale);
+
+const nav = [
+  { href: sectionHref(locale, 'projects'), label: t('nav.projects') },
+  { href: sectionHref(locale, 'experience'), label: t('nav.experience') },
+  { href: sectionHref(locale, 'contact'), label: t('nav.contact') },
+];
+---
+
+<header
+  class:list={[
+    'top-0 z-40 w-full text-stage-ink',
+    overlay ? 'fixed' : 'sticky',
+    'bg-stage/72 backdrop-blur-xl backdrop-saturate-150',
+  ]}
+>
+  <div class="container-page flex h-(--header-h) items-center justify-between gap-6">
+    <a href={routes.home(locale)} class="text-[1.0625rem] font-semibold tracking-tight no-underline" aria-label={t('nav.home')}>
+      {profile.shortName}
+    </a>
+    <nav aria-label={t('nav.label')} class="flex items-center gap-1 sm:gap-2">
+      <ul class="hidden items-center gap-1 md:flex" role="list">
+        {
+          nav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class="rounded-full px-3 py-2 text-[0.9375rem] text-stage-ink/80 no-underline transition-colors duration-150 hover:text-stage-ink"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a
+        href={alternates[other]}
+        hreflang={htmlLang[other]}
+        lang={htmlLang[other]}
+        aria-label={t('lang.switchLabel')}
+        class="rounded-full px-3 py-2 text-[0.9375rem] font-medium text-stage-ink/80 no-underline transition-colors duration-150 hover:text-stage-ink"
+      >
+        {t('lang.switch')}
+      </a>
+      <a
+        href={routes.cvPdf(locale)}
+        download
+        aria-label={t('cta.cvLabel')}
+        class="btn min-h-9 bg-stage-ink px-4 text-[0.9375rem] text-stage"
+      >
+        {t('cta.cv')}
+      </a>
+    </nav>
+  </div>
+</header>
