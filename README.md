@@ -2,6 +2,8 @@
 
 Personal portfolio and CV of **Pedro Luis Soto Santos**, AI Engineer focused on Python: agents that learn to make decisions through reinforcement learning, planning and search.
 
+**Live site:** <https://plss12.github.io>
+
 ## Highlights
 
 - **Bilingual (ES / EN)** with typed translations: every piece of content is a `Record<Locale, string>`, so a missing translation fails the build.
@@ -14,7 +16,7 @@ Personal portfolio and CV of **Pedro Luis Soto Santos**, AI Engineer focused on 
 - **One-page CV generated from the same data**, printed to PDF in both languages at build time.
 - **Light and dark themes** following the system preference.
 
-Lighthouse: 99–100 Performance and 100 Accessibility, Best Practices and SEO; CLS 0.
+Lighthouse on the live site: 98–100 Performance and 100 Accessibility, Best Practices and SEO; CLS 0.
 
 ## Tech stack
 
@@ -79,7 +81,7 @@ Spanish is served at `/` and English at `/en/`. Both are configured in `astro.co
 
 ## Deployment
 
-The site will be deployed to **GitHub Pages** at <https://plss12.github.io>.
+Every push to `main` deploys to **GitHub Pages** through [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml): it installs dependencies and Playwright's Chromium, runs `npm run build` (type check, static build and CV PDFs) and publishes `dist/`.
 
 ## License
 

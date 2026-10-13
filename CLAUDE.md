@@ -26,7 +26,7 @@ Web personal de portfolio + CV para búsqueda activa de empleo como AI Engineer 
 ## Objetivos de calidad
 
 - Diseño propio e intencional (skill `frontend-design`), revisado con `web-design-guidelines` antes de dar una sección por terminada.
-- Lighthouse cercano a 100 (skills `web-quality-audit`, `performance`, `core-web-vitals`, `accessibility`, `seo`, `best-practices`). Estado actual: 99–100 en rendimiento y 100 en accesibilidad, buenas prácticas y SEO; CLS 0; 0 KB de JS.
+- Lighthouse cercano a 100 (skills `web-quality-audit`, `performance`, `core-web-vitals`, `accessibility`, `seo`, `best-practices`). Estado actual en producción: 98–100 en rendimiento y 100 en accesibilidad, buenas prácticas y SEO; CLS 0; 0 KB de JS.
 - Revisar visualmente con `npm run screenshots -- <url-base> <carpeta> <rutas...>` (390, 820 y 1440 px, claro y oscuro).
 
 ## Contexto personal
@@ -54,5 +54,5 @@ Astro 7 (salida estática, sin JS de cliente) + Tailwind CSS 4 vía `@tailwindcs
 - **CV:** `/cv/` y `/en/cv/` (`CvDocument.astro`, `noindex`, excluidas del sitemap) se imprimen a `dist/cv/pedro-luis-soto-santos-cv-{es,en}.pdf` tras el build. Debe caber en una página A4.
 - **SEO:** `BaseLayout.astro` (props `title`, `description`, `alternates`, `noindex`, `schema`, `bare`) gestiona canonical, `hreflang`, Open Graph (`public/og.jpg`, `og-en.jpg`) y JSON-LD. Sitemap con `@astrojs/sitemap`.
 - **Imágenes:** fotos en `src/assets/photos/` (procesadas desde `contexto/Fotos`); la cabecera usa dirección de arte manual con `getImage` (retrato en móvil, panorámica en escritorio) y `fetchpriority="high"`.
-- **Dominio:** `site` en `astro.config.mjs` y `public/robots.txt` apuntan a `https://plss12.github.io`. Pendiente: desplegar en GitHub Pages (instalar Chromium en el workflow para el PDF del CV).
+- **Despliegue:** cada push a `main` publica en GitHub Pages (https://plss12.github.io) con `.github/workflows/deploy.yml` (Node de `.nvmrc`, Chromium de Playwright para el CV, `npm run build`, `dist/`). `site` en `astro.config.mjs` y `public/robots.txt` apuntan a ese dominio; si cambia, actualizar ambos. `src/pages/404.astro` es la página de error.
 - Astro 7 cambió APIs respecto a Astro 5: colecciones en `src/content.config.ts` con loaders, `z` desde `astro/zod` (Zod 4), fuentes con la clave `fonts` + `<Font />`, compilador en Rust que no corrige HTML inválido. Antes de usar una API, consultar la documentación actual.
