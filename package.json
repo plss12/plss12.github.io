@@ -33,10 +33,11 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro check && astro build",
+    "build": "astro check && astro build && node scripts/cv-pdf.mjs",
     "preview": "astro preview",
     "check": "astro check",
-    "astro": "astro"
+    "astro": "astro",
+    "screenshots": "node scripts/screenshots.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-satteri": "^0.4.3",

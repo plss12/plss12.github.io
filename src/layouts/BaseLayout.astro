@@ -19,6 +19,8 @@ interface Props {
   schema?: Record<string, unknown>;
   /** La portada pinta su propia cabecera oscura bajo la barra. */
   overlayHeader?: boolean;
+  /** Sin barra ni pie (vista imprimible del CV). */
+  bare?: boolean;
 }
 
 const {
@@ -30,6 +32,7 @@ const {
   ogType = 'profile',
   schema,
   overlayHeader = false,
+  bare = false,
 } = Astro.props;
 const t = useTranslations(locale);
 
@@ -93,10 +96,10 @@ const personSchema = {
       class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-bg"
       >{t('skip')}</a
     >
-    <Header locale={locale} alternates={alternates} overlay={overlayHeader} />
+    {!bare && <Header locale={locale} alternates={alternates} overlay={overlayHeader} />}
     <main id="main" tabindex="-1">
       <slot />
     </main>
-    <Footer locale={locale} />
+    {!bare && <Footer locale={locale} />}
   </body>
 </html>

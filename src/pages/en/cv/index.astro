@@ -1,0 +1,11 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import CvDocument from '@/components/CvDocument.astro';
+import { routes, useTranslations } from '@/i18n';
+
+const t = useTranslations('en');
+---
+
+<BaseLayout locale="en" title={t('cv.title')} alternates={{ es: routes.cv('es'), en: routes.cv('en') }} noindex bare>
+  <CvDocument locale="en" />
+</BaseLayout>
