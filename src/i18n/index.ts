@@ -69,8 +69,8 @@ export const ui = {
   'proofs.label': { es: 'Resultados destacados', en: 'Key results' },
   'projects.title': { es: 'Proyectos', en: 'Projects' },
   'projects.intro': {
-    es: 'Agentes que aprenden, planifican y deciden, todos escritos en Python. Cada proyecto, con su código.',
-    en: 'Agents that learn, plan and decide, all written in Python. Every project comes with its code.',
+    es: 'Agentes que aprenden, planifican y deciden. Cada proyecto, con su código.',
+    en: 'Agents that learn, plan and decide. Every project comes with its code.',
   },
   'projects.more': { es: 'También en Kaggle', en: 'Also on Kaggle' },
   'capabilities.title': { es: 'Lo que mejor hago', en: 'What I do best' },

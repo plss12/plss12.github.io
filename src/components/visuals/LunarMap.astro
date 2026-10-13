@@ -16,17 +16,60 @@ const { locale, mode } = Astro.props;
 const SIZE = 40;
 const GAP = 3;
 const VIEW = grid.length * SIZE;
-/*
- * Cada rover circula por su propio carril dentro de la celda para que las rutas solapadas sigan
- * viéndose. La salida y la mina se dibujan sobre ese carril: la línea nace del centro del círculo
- * y atraviesa el rombo por sus vértices.
- */
-const offsets = [-6, 0, 6];
 const series = ['var(--series-1)', 'var(--series-2)', 'var(--series-3)'];
 
-const center = ([row, col]: Cell, offset = 0) => ({ x: col * SIZE + SIZE / 2 + offset, y: row * SIZE + SIZE / 2 + offset });
-const points = (path: Cell[], offset: number) =>
-  path.map((cell) => center(cell, offset)).map(({ x, y }) => `${x},${y}`).join(' ');
+type Point = { x: number; y: number };
+type Dir = 'H' | 'V';
+const center = ([row, col]: Cell): Point => ({ x: col * SIZE + SIZE / 2, y: row * SIZE + SIZE / 2 });
+const dirOf = (a: Cell, b: Cell): Dir => (a[0] === b[0] ? 'H' : 'V');
+
+/*
+ * Carriles: cada rover circula desplazado en perpendicular a su tramo para que las rutas
+ * solapadas sigan viéndose. En el último tramo recto hacia la mezcladora los carriles se reparten
+ * de forma simétrica entre los rovers que llegan por el mismo lado (uno solo entra por el centro,
+ * es decir, por el vértice del hexágono). La salida y la mina se dibujan sobre el carril: la línea
+ * nace del centro del círculo y atraviesa el rombo por sus vértices.
+ */
+const LANES = [-6, 0, 6];
+const routes = rovers(mode);
+
+function finalRunStart(path: Cell[]): number {
+  const last = dirOf(path[path.length - 2]!, path[path.length - 1]!);
+  let f = path.length - 2;
+  while (f > 0 && dirOf(path[f - 1]!, path[f]!) === last) f--;
+  return f;
+}
+
+/* Lado por el que llega cada rover a la mezcladora y carril simétrico dentro de su grupo. */
+const approach = routes.map((r) => {
+  const [a, b] = [r.path[r.path.length - 2]!, r.path[r.path.length - 1]!];
+  return `${dirOf(a, b)}${Math.sign(b[0] - a[0] + b[1] - a[1])}`;
+});
+const finalLane = routes.map((_, i) => {
+  const group = routes.map((__, j) => j).filter((j) => approach[j] === approach[i]);
+  const k = group.indexOf(i);
+  const spread = 5;
+  return (k - (group.length - 1) / 2) * spread * 2;
+});
+
+function lanePoints(path: Cell[], lane: number, last: number): Point[] {
+  const f = finalRunStart(path);
+  const segs = path.slice(1).map((cell, i) => ({ dir: dirOf(path[i]!, cell), off: i >= f ? last : lane }));
+  return path.map((cell, i) => {
+    const c = center(cell);
+    const adjacent = [segs[i - 1], segs[i]].filter((x) => x !== undefined);
+    const v = adjacent.find((x) => x.dir === 'V');
+    const h = adjacent.find((x) => x.dir === 'H');
+    return { x: c.x + (v?.off ?? 0), y: c.y + (h?.off ?? 0) };
+  });
+}
+
+const drawn = routes.map((r, i) => {
+  const pts = lanePoints(r.path, LANES[i] ?? 0, finalLane[i] ?? 0);
+  const mineIndex = r.path.findIndex(([row, col]) => row === r.mine[0] && col === r.mine[1]);
+  return { pts, start: pts[0]!, mine: pts[mineIndex]! };
+});
+const toPolyline = (pts: Point[]) => pts.map(({ x, y }) => `${x},${y}`).join(' ');
 const hexagon = (cx: number, cy: number, r: number) =>
   Array.from({ length: 6 }, (_, i) => {
     const a = (Math.PI / 3) * i - Math.PI / 2;
@@ -70,14 +113,14 @@ const b = center(base);
   </g>
 
   <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-    {rovers(mode).map((rover, i) => <polyline points={points(rover.path, offsets[i] ?? 0)} stroke={series[i]} stroke-width="3" />)}
+    {drawn.map((route, i) => <polyline points={toPolyline(route.pts)} stroke={series[i]} stroke-width="3" />)}
   </g>
 
   <g>
     {
-      rovers(mode).map((rover, i) => {
-        const s = center(rover.start, offsets[i]);
-        const m = center(rover.mine, offsets[i]);
+      drawn.map((route, i) => {
+        const s = route.start;
+        const m = route.mine;
         return (
           <>
             <rect x={m.x - 9} y={m.y - 9} width="18" height="18" rx="3" transform={`rotate(45 ${m.x} ${m.y})`} fill="var(--bg)" stroke={series[i]} stroke-width="3" />

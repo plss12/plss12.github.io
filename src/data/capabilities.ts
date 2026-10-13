@@ -61,8 +61,8 @@ export const capabilities: Capability[] = [
   {
     title: { es: 'Python limpio, documentado y publicado', en: 'Clean, documented, published Python' },
     description: {
-      es: 'Python es mi lenguaje principal. Escribo código pensado para que otros lo usen, y convierto la investigación en herramientas como pyplAI, una biblioteca open source en PyPI con API documentada y ejemplos.',
-      en: 'Python is my main language. I write code meant for others to use, and turn research into tools like pyplAI, an open-source library on PyPI with a documented API and examples.',
+      es: 'Es mi lenguaje principal. Escribo código pensado para que otros lo usen, y convierto la investigación en herramientas como pyplAI, una biblioteca open source en PyPI con API documentada y ejemplos.',
+      en: 'It’s my main language. I write code meant for others to use, and turn research into tools like pyplAI, an open-source library on PyPI with a documented API and examples.',
     },
     evidence: [{ label: { es: 'pyplAI en PyPI', en: 'pyplAI on PyPI' }, href: 'https://pypi.org/project/pyplAI/' }],
   },

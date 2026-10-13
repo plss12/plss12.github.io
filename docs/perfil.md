@@ -29,7 +29,7 @@ Capacidades, por orden de relevancia para el mercado (`src/data/capabilities.ts`
 5. Datos en producción para modelos de IA (Minsait, −50 % de tiempo ETL).
 
 **Python** es el lenguaje principal y se destaca de forma natural, sin repetirlo en cada línea:
-en la presentación, en la intro de proyectos («todos escritos en Python»), en la capacidad
+en la presentación, en la capacidad
 «Python limpio, documentado y publicado», en la línea «Hecho con…» de cada proyecto (pyplAI:
 Python puro, sin dependencias), en la capacidad de datos (Python + ODI) y en el perfil del CV.
 
@@ -44,7 +44,7 @@ En segundo plano: Kaggle básicos (no se muestran), Java, diseño (SolidWorks, P
 
 - **Top 10 mundial** en la competición ConnectX de Kaggle, con AlphaZero desde cero.
 - **Matrícula de Honor** en el TFM y en el TFG.
-- **La mitad de tiempo** para procesar los datos que alimentan los modelos de riesgo de un gran banco (−50 % tras optimizar sus pipelines).
+- **−50 % de tiempo** de ejecución en los procesos diarios de los modelos de riesgo de un banco de primer nivel.
 
 ## Formación
 

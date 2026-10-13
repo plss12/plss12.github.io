@@ -24,10 +24,10 @@ export const highlights: Highlight[] = [
     },
   },
   {
-    value: { es: 'La mitad de tiempo', en: 'Half the time' },
+    value: { es: '−50 % de tiempo', en: '−50% runtime' },
     context: {
-      es: 'para procesar los datos que alimentan los modelos de riesgo de un gran banco, tras optimizar sus pipelines.',
-      en: 'to process the data feeding a major bank’s risk models, after I optimised its pipelines.',
+      es: 'de ejecución en los procesos diarios de los modelos de riesgo de un banco de primer nivel.',
+      en: 'on the daily processes behind a top-tier bank’s risk models.',
     },
   },
 ];
