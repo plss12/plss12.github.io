@@ -1,0 +1,17 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { routes } from '@/i18n';
+---
+
+<BaseLayout locale="es" title="Página no encontrada" noindex>
+  <section class="section-space">
+    <div class="container-page">
+      <h1 class="text-display max-w-[14ch]">Esta página no existe.</h1>
+      <p class="text-lead mt-6 max-w-prose text-muted">Puede que el enlace esté mal o que la página se haya movido.</p>
+      <p class="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4">
+        <a href={routes.home('es')} class="btn bg-ink text-bg">Ir a la portada</a>
+        <a href={routes.home('en')} lang="en" hreflang="en" class="link font-semibold">This page doesn’t exist. Go to the English site</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
