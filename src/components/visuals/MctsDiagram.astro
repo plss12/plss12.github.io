@@ -1,0 +1,143 @@
+---
+/*
+ * Las cuatro fases de Monte Carlo Tree Search, el algoritmo base de pyplAI,
+ * redibujadas con el estilo de la web en una cuadrícula de 2 × 2.
+ */
+import type { Locale, Localized } from '@/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const phases: Localized[] = [
+  { es: '1. Selección', en: '1. Selection' },
+  { es: '2. Expansión', en: '2. Expansion' },
+  { es: '3. Simulación', en: '3. Simulation' },
+  { es: '4. Retropropagación', en: '4. Backpropagation' },
+];
+
+/* Árbol común: raíz, dos hijos y dos nietos bajo el primer hijo. */
+const nodes = {
+  root: { x: 80, y: 24 },
+  a: { x: 48, y: 74 },
+  b: { x: 112, y: 74 },
+  a1: { x: 26, y: 124 },
+  a2: { x: 70, y: 124 },
+};
+type NodeKey = keyof typeof nodes;
+const edges: [NodeKey, NodeKey][] = [
+  ['root', 'a'],
+  ['root', 'b'],
+  ['a', 'a1'],
+  ['a', 'a2'],
+];
+const onPath = new Set<string>(['root-a', 'a-a2']);
+const pathNodes = new Set<NodeKey>(['root', 'a', 'a2']);
+const newNode = { x: 92, y: 172 };
+
+const W = 160;
+const H = 250;
+const GAP_X = 24;
+const GAP_Y = 16;
+
+const text = {
+  title: { es: 'Las cuatro fases de Monte Carlo Tree Search', en: 'The four phases of Monte Carlo Tree Search' },
+  desc: {
+    es: 'Selección: se baja por el árbol eligiendo los nodos más prometedores. Expansión: se añade un nodo nuevo. Simulación: se juega una partida rápida hasta el final. Retropropagación: el resultado sube por el camino y actualiza las estadísticas de cada nodo.',
+    en: 'Selection: walk down the tree picking the most promising nodes. Expansion: add a new node. Simulation: play a quick game to the end. Backpropagation: the result travels back up the path and updates each node’s statistics.',
+  },
+} satisfies Record<string, Localized>;
+const id = `mcts-${locale}`;
+---
+
+<svg
+  viewBox={`0 0 ${W * 2 + GAP_X} ${H * 2 + GAP_Y}`}
+  role="img"
+  aria-labelledby={`${id}-title ${id}-desc`}
+  class="block h-auto w-full max-w-[24rem]"
+>
+  <title id={`${id}-title`}>{text.title[locale]}</title>
+  <desc id={`${id}-desc`}>{text.desc[locale]}</desc>
+  {
+    phases.map((phase, i) => (
+      <g transform={`translate(${(i % 2) * (W + GAP_X)} ${Math.floor(i / 2) * (H + GAP_Y)})`}>
+        {edges.map(([from, to]) => {
+          const on = onPath.has(`${from}-${to}`);
+          return (
+            <line
+              x1={nodes[from].x}
+              y1={nodes[from].y}
+              x2={nodes[to].x}
+              y2={nodes[to].y}
+              stroke={on ? 'var(--ink)' : 'var(--line)'}
+              stroke-width={on ? 3 : 2}
+            />
+          );
+        })}
+        {i >= 1 && (
+          <line
+            x1={nodes.a2.x}
+            y1={nodes.a2.y}
+            x2={newNode.x}
+            y2={newNode.y}
+            stroke="var(--ink)"
+            stroke-width="3"
+            stroke-dasharray={i === 1 ? '5 5' : undefined}
+          />
+        )}
+        {i === 2 && (
+          <>
+            <path
+              d={`M${newNode.x},${newNode.y + 12} c -16,10 16,18 0,28`}
+              fill="none"
+              stroke="var(--muted)"
+              stroke-width="2"
+              stroke-dasharray="2 5"
+              stroke-linecap="round"
+            />
+            <rect x={newNode.x - 7} y={newNode.y + 42} width="14" height="14" rx="2" fill="var(--muted)" />
+          </>
+        )}
+        {(Object.keys(nodes) as NodeKey[]).map((key) => {
+          const on = pathNodes.has(key);
+          return (
+            <circle
+              cx={nodes[key].x}
+              cy={nodes[key].y}
+              r="10"
+              fill={on ? 'var(--ink)' : 'var(--bg)'}
+              stroke={on ? 'var(--ink)' : 'var(--muted)'}
+              stroke-width="2"
+            />
+          );
+        })}
+        {i >= 1 && (
+          <circle
+            cx={newNode.x}
+            cy={newNode.y}
+            r="10"
+            fill={i === 1 ? 'var(--bg)' : 'var(--ink)'}
+            stroke="var(--ink)"
+            stroke-width="2"
+            stroke-dasharray={i === 1 ? '4 3' : undefined}
+          />
+        )}
+        {i === 3 && (
+          <g stroke="var(--ink)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d={`M${newNode.x + 22},${newNode.y - 6} L${nodes.a2.x + 26},${nodes.a2.y + 10}`} />
+            <path d={`M${nodes.a2.x + 26},${nodes.a2.y + 10} l 0,9 m 0,-9 l 8,4`} />
+            <path d={`M${nodes.a2.x + 4},${nodes.a2.y - 22} L${nodes.a.x + 14},${nodes.a.y + 14}`} />
+            <path d={`M${nodes.a.x + 14},${nodes.a.y + 14} l 0,-9 m 0,9 l 8,-3`} />
+            <path d={`M${nodes.a.x + 28},${nodes.a.y - 20} L${nodes.root.x + 4},${nodes.root.y + 16}`} />
+            <path d={`M${nodes.root.x + 4},${nodes.root.y + 16} l 1,-9 m -1,9 l 8,-4`} />
+          </g>
+        )}
+        <text x="8" y={H - 10} font-size="15" font-weight="600" fill="var(--ink)">
+          {phase[locale]}
+        </text>
+      </g>
+    ))
+  }
+</svg>

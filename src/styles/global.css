@@ -18,6 +18,11 @@
   --stage-ink: #f5f5f5;
   --stage-muted: #a1a1a1;
 
+  /* Color solo para datos: tres series categóricas validadas para daltonismo (skill dataviz). */
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+
   --header-h: 3.5rem;
 }
 
@@ -28,6 +33,10 @@
     --ink: #f5f5f5;
     --muted: #a1a1a1;
     --line: #2a2a2a;
+
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
   }
 }
 
@@ -40,6 +49,9 @@
   --color-stage: var(--stage);
   --color-stage-ink: var(--stage-ink);
   --color-stage-muted: var(--stage-muted);
+  --color-series-1: var(--series-1);
+  --color-series-2: var(--series-2);
+  --color-series-3: var(--series-3);
 
   --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
 }

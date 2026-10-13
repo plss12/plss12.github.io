@@ -1,0 +1,152 @@
+---
+/*
+ * Evolución real de la recompensa media por acción durante el entrenamiento del TFM,
+ * a partir de los CSV publicados en el repositorio. SVG estático: sin JavaScript.
+ */
+import type { Locale, Localized } from '@/i18n';
+import dddqlCsv from '@/data/metrics/training_metrics_dddql.csv?raw';
+import mappoCsv from '@/data/metrics/training_metrics_mappo.csv?raw';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+type Point = { step: number; reward: number };
+
+function parse(csv: string): Point[] {
+  const [header = '', ...rows] = csv.trim().split(/\r?\n/);
+  const cols = header.split(',');
+  const iStep = cols.indexOf('final_steps');
+  const iReward = cols.indexOf('average_reward');
+  return rows.map((row) => {
+    const cells = row.split(',');
+    return { step: Number(cells[iStep]), reward: Number(cells[iReward]) };
+  });
+}
+
+/** Media móvil centrada: suaviza el ruido de exploración sin cambiar la tendencia. */
+function smooth(points: Point[], window: number): Point[] {
+  const half = Math.floor(window / 2);
+  return points.map((p, i) => {
+    const slice = points.slice(Math.max(0, i - half), i + half + 1);
+    return { step: p.step, reward: slice.reduce((s, q) => s + q.reward, 0) / slice.length };
+  });
+}
+
+const dddql = parse(dddqlCsv);
+const mappo = parse(mappoCsv);
+const series = [
+  { name: 'DDDQL', points: smooth(dddql, 9), stroke: 'var(--ink)', width: 2.5 },
+  { name: 'MAPPO', points: smooth(mappo, 3), stroke: 'var(--muted)', width: 2 },
+];
+
+const W = 560;
+const H = 320;
+const m = { top: 16, right: 76, bottom: 44, left: 40 };
+const xMax = 6_000_000;
+const yMin = -15;
+const yMax = 20;
+const x = (step: number) => m.left + (step / xMax) * (W - m.left - m.right);
+const y = (reward: number) => m.top + ((yMax - reward) / (yMax - yMin)) * (H - m.top - m.bottom);
+const path = (pts: Point[]) => pts.map((p, i) => `${i ? 'L' : 'M'}${x(p.step).toFixed(1)},${y(p.reward).toFixed(1)}`).join('');
+
+const xTicks = [0, 1, 2, 3, 4, 5, 6];
+const yTicks = [-10, 0, 10, 20];
+const fmt = new Intl.NumberFormat(locale === 'es' ? 'es-ES' : 'en', { maximumFractionDigits: 1 });
+
+const text = {
+  title: { es: 'Recompensa media por acción durante el entrenamiento', en: 'Mean reward per action during training' },
+  desc: {
+    es: `DDDQL pasa de ${fmt.format(dddql[0]!.reward)} a ${fmt.format(dddql.at(-1)!.reward)} en 3,75 millones de pasos. MAPPO se mantiene en negativo durante 6 millones de pasos y termina en ${fmt.format(mappo.at(-1)!.reward)}.`,
+    en: `DDDQL climbs from ${fmt.format(dddql[0]!.reward)} to ${fmt.format(dddql.at(-1)!.reward)} over 3.75 million steps. MAPPO stays negative for 6 million steps and ends at ${fmt.format(mappo.at(-1)!.reward)}.`,
+  },
+  xAxis: { es: 'Millones de pasos de entrenamiento', en: 'Training steps (millions)' },
+  note: {
+    es: 'Media móvil sobre los puntos de control. Datos: repositorio del TFM.',
+    en: 'Moving average over checkpoints. Data: thesis repository.',
+  },
+  table: { es: 'Ver los datos', en: 'View the data' },
+  steps: { es: 'Pasos', en: 'Steps' },
+} satisfies Record<string, Localized>;
+
+/* Tabla accesible: un punto de control cada medio millón de pasos. */
+const tableRows = Array.from({ length: 12 }, (_, i) => (i + 1) * 500_000).map((step) => ({
+  step,
+  dddql: dddql.find((p) => p.step === step)?.reward,
+  mappo: mappo.find((p) => p.step === step)?.reward,
+}));
+const id = `training-${locale}`;
+---
+
+<figure class="training">
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby={`${id}-title ${id}-desc`} class="block h-auto w-full overflow-visible">
+    <title id={`${id}-title`}>{text.title[locale]}</title>
+    <desc id={`${id}-desc`}>{text.desc[locale]}</desc>
+
+    <g font-size="13" fill="var(--muted)">
+      {
+        yTicks.map((t) => (
+          <>
+            <line x1={m.left} x2={W - m.right} y1={y(t)} y2={y(t)} stroke={t === 0 ? 'var(--muted)' : 'var(--line)'} stroke-width="1" />
+            <text x={m.left - 8} y={y(t) + 4} text-anchor="end">
+              {t}
+            </text>
+          </>
+        ))
+      }
+      {
+        xTicks.map((t) => (
+          <text x={x(t * 1_000_000)} y={H - m.bottom + 20} text-anchor="middle">
+            {t}
+          </text>
+        ))
+      }
+      <text x={m.left + (W - m.left - m.right) / 2} y={H - 6} text-anchor="middle">{text.xAxis[locale]}</text>
+    </g>
+
+    <g fill="none" stroke-linejoin="round" stroke-linecap="round">
+      {series.map((s) => <path d={path(s.points)} stroke={s.stroke} stroke-width={s.width} />)}
+    </g>
+
+    <g font-size="14" font-weight="600" fill="var(--ink)">
+      {
+        series.map((s) => {
+          const last = s.points.at(-1)!;
+          return (
+            <>
+              <circle cx={x(last.step)} cy={y(last.reward)} r="4" fill={s.stroke} />
+              <text x={x(last.step) + 10} y={y(last.reward) + 5}>
+                {s.name}
+              </text>
+            </>
+          );
+        })
+      }
+    </g>
+  </svg>
+  <figcaption class="mt-3 text-sm text-muted">
+    <span class="font-semibold text-ink">{text.title[locale]}.</span>{' '}
+    {text.note[locale]}
+  </figcaption>
+  <details class="mt-3 text-sm">
+    <summary class="link cursor-pointer text-muted">{text.table[locale]}</summary>
+    <table class="mt-3 w-full max-w-md text-left tabular-nums">
+      <thead class="text-muted">
+        <tr><th class="py-1 font-medium">{text.steps[locale]}</th><th class="py-1 font-medium">DDDQL</th><th class="py-1 font-medium">MAPPO</th></tr>
+      </thead>
+      <tbody>
+        {
+          tableRows.map((r) => (
+            <tr class="border-t border-line">
+              <td class="py-1">{fmt.format(r.step / 1_000_000)} M</td>
+              <td class="py-1">{r.dddql === undefined ? '–' : fmt.format(r.dddql)}</td>
+              <td class="py-1">{r.mappo === undefined ? '–' : fmt.format(r.mappo)}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </details>
+</figure>

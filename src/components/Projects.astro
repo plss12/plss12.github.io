@@ -1,0 +1,46 @@
+---
+import { sectionIds, useTranslations, type Locale } from '@/i18n';
+import { projects, kaggleResults } from '@/data/projects';
+import FeaturedProject from '@/components/FeaturedProject.astro';
+import ProjectCard from '@/components/ProjectCard.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const id = sectionIds.projects[locale];
+---
+
+<section id={id} class="section-space" aria-labelledby={`${id}-title`}>
+  <div class="container-page">
+    <header class="max-w-3xl">
+      <h2 id={`${id}-title`} class="text-title">{t('projects.title')}</h2>
+      <p class="text-lead mt-4 text-muted">{t('projects.intro')}</p>
+    </header>
+
+    <div class="mt-16 md:mt-24">
+      <FeaturedProject locale={locale} />
+    </div>
+
+    <div class="mt-24 grid gap-6 md:mt-32 lg:grid-cols-2">
+      {projects.map((project) => <ProjectCard locale={locale} project={project} />)}
+    </div>
+
+    <p class="mt-10 text-muted">
+      <span class="font-semibold text-ink">{t('projects.more')}:</span>{' '}
+      {
+        kaggleResults.map((result, i) => (
+          <>
+            <a href={result.href} class="link text-ink">
+              {result.name}
+            </a>
+            , {result.result[locale]}
+            {i < kaggleResults.length - 1 ? '; ' : '.'}
+          </>
+        ))
+      }
+    </p>
+  </div>
+</section>
