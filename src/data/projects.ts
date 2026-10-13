@@ -24,6 +24,8 @@ export interface Project {
   summary: Localized;
   facts: ProjectFact[];
   stack: string[];
+  /** Sustituye a la línea «Hecho con…» cuando hay algo más interesante que contar del stack. */
+  stackNote?: Localized;
   links: ProjectLink[];
   visual: ProjectVisual;
   caseStudy: boolean;
@@ -79,7 +81,11 @@ export const projects: Project[] = [
       { value: { es: '4', en: '4' }, label: { es: 'algoritmos de búsqueda', en: 'search algorithms' } },
       { value: { es: '8', en: '8' }, label: { es: 'juegos de ejemplo', en: 'example games' } },
     ],
-    stack: ['Python', 'PyPI'],
+    stack: ['Python'],
+    stackNote: {
+      es: 'Python puro, sin dependencias externas: solo la biblioteca estándar.',
+      en: 'Pure Python with no external dependencies, just the standard library.',
+    },
     links: [
       { label: github, href: 'https://github.com/plss12/pyplAI' },
       { label: { es: 'Ver en PyPI', en: 'View on PyPI' }, href: 'https://pypi.org/project/pyplAI/' },

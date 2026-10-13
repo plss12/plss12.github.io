@@ -20,12 +20,14 @@ const phases: Localized[] = [
 
 type P = { x: number; y: number };
 /* Árbol común: raíz, dos hijos y dos nietos; el camino elegido baja por la izquierda. */
+/* La etiqueta va arriba de cada panel; el árbol empieza debajo. */
+const TOP = 40;
 const nodes = {
-  root: { x: 80, y: 12 },
-  a: { x: 56, y: 42 },
-  b: { x: 104, y: 42 },
-  a1: { x: 38, y: 72 },
-  a2: { x: 74, y: 72 },
+  root: { x: 72, y: TOP + 12 },
+  a: { x: 48, y: TOP + 44 },
+  b: { x: 96, y: TOP + 44 },
+  a1: { x: 30, y: TOP + 76 },
+  a2: { x: 66, y: TOP + 76 },
 } satisfies Record<string, P>;
 type NodeKey = keyof typeof nodes;
 const edges: [NodeKey, NodeKey][] = [
@@ -36,32 +38,43 @@ const edges: [NodeKey, NodeKey][] = [
 ];
 const onPath = new Set(['root-a', 'a-a2']);
 const pathNodes = new Set<NodeKey>(['root', 'a', 'a2']);
-const leaf: P = { x: 92, y: 102 };
-const terminal: P = { x: 92, y: 130 };
+const leaf: P = { x: 84, y: TOP + 108 };
+const terminal: P = { x: 84, y: TOP + 136 };
 
 const R = 7;
 const W = 166;
-const H = 166;
+const H = TOP + 150;
 const GAP_X = 10;
-const GAP_Y = 12;
-const LABEL_Y = H - 6;
+const GAP_Y = 22;
+const LABEL_Y = 16;
 
-/* Flecha de retropropagación: paralela a la rama, desplazada a la derecha y apuntando al padre. */
-function backArrow(child: P, parent: P) {
-  const dx = parent.x - child.x;
-  const dy = parent.y - child.y;
-  const len = Math.hypot(dx, dy);
-  const ux = dx / len;
-  const uy = dy / len;
-  const nx = -uy;
-  const ny = ux;
-  const off = 10;
-  const trim = R + 3;
-  const sx = child.x + ux * trim + nx * off;
-  const sy = child.y + uy * trim + ny * off;
-  const ex = parent.x - ux * trim + nx * off;
-  const ey = parent.y - uy * trim + ny * off;
-  return `M${sx.toFixed(1)},${sy.toFixed(1)} L${ex.toFixed(1)},${ey.toFixed(1)}`;
+/*
+ * Retropropagación: una sola flecha continua, paralela al camino y separada de él,
+ * que sube desde la hoja simulada hasta la raíz.
+ */
+function backPath(points: P[], offset: number, trimStart: number, trimEnd: number): string {
+  const normals = points.slice(1).map((p, i) => {
+    const q = points[i]!;
+    const len = Math.hypot(p.x - q.x, p.y - q.y);
+    return { x: -(p.y - q.y) / len, y: (p.x - q.x) / len };
+  });
+  const shifted = points.map((p, i) => {
+    const n1 = normals[Math.max(0, i - 1)]!;
+    const n2 = normals[Math.min(normals.length - 1, i)]!;
+    const nx = n1.x + n2.x;
+    const ny = n1.y + n2.y;
+    const nl = Math.hypot(nx, ny);
+    const k = offset / Math.max(0.5, (nx * n2.x + ny * n2.y) / nl);
+    return { x: p.x + (nx / nl) * k, y: p.y + (ny / nl) * k };
+  });
+  const trim = (from: P, to: P, d: number) => {
+    const len = Math.hypot(to.x - from.x, to.y - from.y);
+    return { x: from.x + ((to.x - from.x) / len) * d, y: from.y + ((to.y - from.y) / len) * d };
+  };
+  shifted[0] = trim(shifted[0]!, shifted[1]!, trimStart);
+  const last = shifted.length - 1;
+  shifted[last] = trim(shifted[last]!, shifted[last - 1]!, trimEnd);
+  return shifted.map((p, i) => `${i ? 'L' : 'M'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
 }
 
 const text = {
@@ -83,7 +96,7 @@ const id = `mcts-${locale}`;
   <title id={`${id}-title`}>{text.title[locale]}</title>
   <desc id={`${id}-desc`}>{text.desc[locale]}</desc>
   <defs>
-    <marker id={`${id}-arrow`} viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+    <marker id={`${id}-arrow`} viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M1,1 L8,5 L1,9" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
     </marker>
   </defs>
@@ -154,15 +167,15 @@ const id = `mcts-${locale}`;
           />
         )}
         {i === 3 && (
-          <g fill="none" stroke="var(--ink)" stroke-width="1.75" stroke-linecap="round">
-            {[
-              [leaf, nodes.a2],
-              [nodes.a2, nodes.a],
-              [nodes.a, nodes.root],
-            ].map(([child, parent]) => (
-              <path d={backArrow(child!, parent!)} marker-end={`url(#${id}-arrow)`} />
-            ))}
-          </g>
+          <path
+            d={backPath([leaf, nodes.a2, nodes.a, nodes.root], 16, 2, 6)}
+            fill="none"
+            stroke="var(--ink)"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            marker-end={`url(#${id}-arrow)`}
+          />
         )}
         <text x={W / 2} y={LABEL_Y} text-anchor="middle" font-size="15" font-weight="600" fill="var(--ink)">
           {phase[locale]}

@@ -14,8 +14,8 @@ export const profile = {
     en: 'I’m Pedro, an AI engineer focused on Python. I work with machine learning and reinforcement learning to build agents that learn from their environment and make good decisions.',
   } satisfies Localized,
   summary: {
-    es: 'Ingeniero de software con máster en Inteligencia Artificial y más de dos años de experiencia en datos y desarrollo en entornos empresariales. Me especializo en agentes y aprendizaje por refuerzo, con experiencia en llevar datos a producción para modelos de IA.',
-    en: 'Software engineer with a Master’s in Artificial Intelligence and over two years of experience in enterprise data and software. I specialise in agents and reinforcement learning, with hands-on experience delivering production data for AI models.',
+    es: 'Ingeniero de software especializado en Python, con máster en Inteligencia Artificial y más de dos años de experiencia en datos y desarrollo en entornos empresariales. Me centro en agentes y aprendizaje por refuerzo, con experiencia en llevar datos a producción para modelos de IA.',
+    en: 'Software engineer specialising in Python, with a Master’s in Artificial Intelligence and over two years of experience in enterprise data and software. I focus on agents and reinforcement learning, with hands-on experience delivering production data for AI models.',
   } satisfies Localized,
   location: {
     es: 'España. Abierto a trabajar en cualquier país de Europa.',

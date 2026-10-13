@@ -16,7 +16,11 @@ const { locale, mode } = Astro.props;
 const SIZE = 40;
 const GAP = 3;
 const VIEW = grid.length * SIZE;
-/* Cada rover se desplaza un poco dentro de la celda para que las rutas solapadas sigan viéndose. */
+/*
+ * Cada rover circula por su propio carril dentro de la celda para que las rutas solapadas sigan
+ * viéndose. La salida y la mina se dibujan sobre ese carril: la línea nace del centro del círculo
+ * y atraviesa el rombo por sus vértices.
+ */
 const offsets = [-6, 0, 6];
 const series = ['var(--series-1)', 'var(--series-2)', 'var(--series-3)'];
 
@@ -72,8 +76,8 @@ const b = center(base);
   <g>
     {
       rovers(mode).map((rover, i) => {
-        const s = center(rover.start);
-        const m = center(rover.mine);
+        const s = center(rover.start, offsets[i]);
+        const m = center(rover.mine, offsets[i]);
         return (
           <>
             <rect x={m.x - 9} y={m.y - 9} width="18" height="18" rx="3" transform={`rotate(45 ${m.x} ${m.y})`} fill="var(--bg)" stroke={series[i]} stroke-width="3" />

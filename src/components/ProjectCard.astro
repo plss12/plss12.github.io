@@ -3,6 +3,7 @@ import { routes, useTranslations, type Locale } from '@/i18n';
 import type { Project } from '@/data/projects';
 import MctsDiagram from '@/components/visuals/MctsDiagram.astro';
 import Connect4Board from '@/components/visuals/Connect4Board.astro';
+import BuiltWith from '@/components/BuiltWith.astro';
 
 interface Props {
   locale: Locale;
@@ -26,6 +27,7 @@ const headingId = `project-${project.slug}`;
   </p>
   <h3 id={headingId} class="text-subtitle mt-4">{project.tagline[locale]}</h3>
   <p class="mt-4 text-muted">{project.summary[locale]}</p>
+  <BuiltWith locale={locale} stack={project.stack} note={project.stackNote} class="mt-4" />
 
   <dl class="mt-8 grid grid-cols-2 gap-6 border-t border-line pt-6">
     {

@@ -4,6 +4,7 @@ import { featuredProject as project } from '@/data/projects';
 import { totalSteps } from '@/data/lunar-scenario';
 import LunarMap from '@/components/visuals/LunarMap.astro';
 import LunarLegend from '@/components/visuals/LunarLegend.astro';
+import BuiltWith from '@/components/BuiltWith.astro';
 
 interface Props {
   locale: Locale;
@@ -27,6 +28,7 @@ const caption = {
       </p>
       <h3 id="featured-title" class="text-title mt-6">{project.tagline[locale]}</h3>
       <p class="mt-6 max-w-prose text-muted">{project.summary[locale]}</p>
+      <BuiltWith locale={locale} stack={project.stack} note={project.stackNote} class="mt-4" />
 
       <dl class="mt-10 grid grid-cols-3 gap-6 border-t border-line pt-6">
         {

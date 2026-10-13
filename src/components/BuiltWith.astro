@@ -1,0 +1,19 @@
+---
+/* Línea discreta con el stack del proyecto, con la conjunción de cada idioma («y» / «and»). */
+import { htmlLang, useTranslations, type Locale, type Localized } from '@/i18n';
+
+interface Props {
+  locale: Locale;
+  stack: string[];
+  note?: Localized | undefined;
+  class?: string;
+}
+
+const { locale, stack, note, class: className } = Astro.props;
+const t = useTranslations(locale);
+const list = new Intl.ListFormat(htmlLang[locale], { style: 'long', type: 'conjunction' }).format(stack);
+---
+
+<p class:list={['text-sm text-muted', className]}>
+  {note ? note[locale] : <>{t('project.builtWith')} <span class="text-ink" translate="no">{list}</span>.</>}
+</p>

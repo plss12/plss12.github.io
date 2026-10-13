@@ -28,6 +28,11 @@ Capacidades, por orden de relevancia para el mercado (`src/data/capabilities.ts`
 4. Software de IA publicado y documentado (pyplAI en PyPI).
 5. Datos en producción para modelos de IA (Minsait, −50 % de tiempo ETL).
 
+**Python** es el lenguaje principal y se destaca de forma natural, sin repetirlo en cada línea:
+en la presentación, en la intro de proyectos («todos escritos en Python»), en la capacidad
+«Python limpio, documentado y publicado», en la línea «Hecho con…» de cada proyecto (pyplAI:
+Python puro, sin dependencias), en la capacidad de datos (Python + ODI) y en el perfil del CV.
+
 LLMs, RAG y MCP aparecen solo como herramientas hasta que haya un proyecto que lo demuestre.
 Propuesta pendiente: un servidor MCP que exponga pyplAI como herramientas para que un agente
 LLM planifique jugadas. Cuando exista, se añade como proyecto destacado.

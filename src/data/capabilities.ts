@@ -59,18 +59,18 @@ export const capabilities: Capability[] = [
     ],
   },
   {
-    title: { es: 'Software de IA publicado y documentado', en: 'Published, documented AI software' },
+    title: { es: 'Python limpio, documentado y publicado', en: 'Clean, documented, published Python' },
     description: {
-      es: 'Convierto la investigación en herramientas que otros pueden usar: una biblioteca open source en PyPI con API documentada y ejemplos.',
-      en: 'I turn research into tools others can use: an open-source library on PyPI with a documented API and examples.',
+      es: 'Python es mi lenguaje principal. Escribo código pensado para que otros lo usen, y convierto la investigación en herramientas como pyplAI, una biblioteca open source en PyPI con API documentada y ejemplos.',
+      en: 'Python is my main language. I write code meant for others to use, and turn research into tools like pyplAI, an open-source library on PyPI with a documented API and examples.',
     },
     evidence: [{ label: { es: 'pyplAI en PyPI', en: 'pyplAI on PyPI' }, href: 'https://pypi.org/project/pyplAI/' }],
   },
   {
     title: { es: 'Datos en producción para modelos de IA', en: 'Production data for AI models' },
     description: {
-      es: 'Pipelines ETL fiables a gran escala: en banca reduje un 50 % el tiempo de procesamiento de los datos que alimentan modelos de riesgo.',
-      en: 'Reliable ETL pipelines at scale: in banking I cut by 50% the processing time of the data feeding risk models.',
+      es: 'Pipelines ETL fiables a gran escala con Python y Oracle Data Integrator: en banca reduje un 50 % el tiempo de procesamiento de los datos que alimentan modelos de riesgo.',
+      en: 'Reliable ETL pipelines at scale with Python and Oracle Data Integrator: in banking I cut by 50% the processing time of the data feeding risk models.',
     },
     evidence: [{ label: { es: 'Data Engineer en Minsait', en: 'Data Engineer at Minsait' } }],
   },
