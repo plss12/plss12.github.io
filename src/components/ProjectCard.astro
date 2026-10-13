@@ -27,7 +27,7 @@ const headingId = `project-${project.slug}`;
   </div>
 
   <p class="mt-8 text-base font-semibold">
-    {project.name}
+    <span translate="no">{project.name}</span>
     <span class="block font-normal text-muted">{project.context[locale]}</span>
   </p>
   <h3 id={headingId} class="text-subtitle mt-4">{project.tagline[locale]}</h3>

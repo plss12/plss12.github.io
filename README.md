@@ -1,8 +1,6 @@
 # plss12.github.io
 
-Personal portfolio and CV of **Pedro Luis Soto Santos**, AI Engineer focused on Python.
-
-> 🚧 Work in progress: content and structure are in place, visual design is under development.
+Personal portfolio and CV of **Pedro Luis Soto Santos**, AI Engineer focused on Python: agents that learn to make decisions through reinforcement learning, planning and search.
 
 ## Highlights
 
@@ -11,8 +9,12 @@ Personal portfolio and CV of **Pedro Luis Soto Santos**, AI Engineer focused on 
 - **SEO-ready**: canonical URLs, `hreflang` alternates, Open Graph, JSON-LD `Person` schema, sitemap and `robots.txt`.
 - **Accessibility first**: semantic landmarks, skip link and labelled navigation.
 - **Content separated from presentation**: all profile data lives in typed modules under `src/data/`.
+- **Real data, drawn in the site's style**: the master's thesis training chart is built from the published CSV metrics, and the test-scenario map reproduces the real routes of the trained agents.
+- **Case studies in MDX** for the master's and bachelor's theses.
+- **One-page CV generated from the same data**, printed to PDF in both languages at build time.
+- **Light and dark themes** following the system preference.
 
-Quality target: Lighthouse scores close to 100 in Performance, Accessibility, Best Practices and SEO.
+Lighthouse: 99–100 Performance and 100 Accessibility, Best Practices and SEO; CLS 0.
 
 ## Tech stack
 
@@ -20,6 +22,9 @@ Quality target: Lighthouse scores close to 100 in Performance, Accessibility, Be
 | --- | --- |
 | Framework | [Astro 7](https://astro.build) (static output) |
 | Styling | [Tailwind CSS 4](https://tailwindcss.com) via `@tailwindcss/vite` |
+| Content | MDX content collections |
+| Typeface | [Instrument Sans](https://fonts.google.com/specimen/Instrument+Sans) variable, self-hosted |
+| Tooling | Playwright (CV PDFs and visual review screenshots) |
 | Language | TypeScript (`strictest`) |
 | SEO | `@astrojs/sitemap` with i18n |
 
@@ -35,20 +40,26 @@ npm run dev       # http://localhost:4321
 | Command | Description |
 | --- | --- |
 | `npm run dev` | Start the dev server |
-| `npm run build` | Type-check (`astro check`) and build the static site into `dist/` |
+| `npm run build` | Type-check, build the static site into `dist/` and print the CV PDFs |
 | `npm run preview` | Preview the production build locally |
 | `npm run check` | Type-check only |
+| `npm run screenshots` | Capture review screenshots (mobile, tablet, desktop; light and dark) |
+
+The CV PDFs need Playwright's Chromium: `npx playwright install chromium`.
 
 ## Project structure
 
 ```
 src/
-├── components/   # UI components (Home.astro renders the whole page)
-├── data/         # Profile, experience, education, projects and skills (ES/EN)
-├── i18n/         # Locales, UI strings and helpers
+├── assets/       # Processed photos
+├── components/   # Page sections; visuals/ holds the SVG charts and diagrams
+├── content/      # Case studies (MDX, one file per language)
+├── data/         # Profile, projects, capabilities, experience, education (ES/EN) + thesis metrics
+├── i18n/         # Locales, routes, UI strings and formatters
 ├── layouts/      # BaseLayout: <head>, SEO and structured data
-├── pages/        # / (Spanish, default) and /en/ (English)
-└── styles/       # Global CSS and design tokens
+├── pages/        # /, /en/, case studies and printable CV
+└── styles/       # Design tokens and global CSS
+scripts/          # CV PDF generation and screenshot tooling
 docs/
 └── perfil.md     # Editorial brief the site content is based on
 ```

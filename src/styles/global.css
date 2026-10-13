@@ -153,6 +153,13 @@
     text-decoration-thickness: 1px;
     text-underline-offset: 0.2em;
   }
+
+  a,
+  button,
+  summary {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
 }
 
 /* Enlace de texto: subrayado discreto que se refuerza al pasar por encima. */
@@ -284,4 +291,9 @@
   .astro-code span {
     color: var(--shiki-dark);
   }
+}
+
+/* Los comentarios de los temas de GitHub no llegan a 4,5:1 sobre --surface: se usa --muted. */
+.astro-code span[style*='#6A737D'] {
+  color: var(--muted) !important;
 }

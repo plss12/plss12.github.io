@@ -41,7 +41,7 @@ const schema = {
       <div class="container-page pt-12 pb-16 md:pt-20 md:pb-24">
         <a href={sectionHref(locale, 'projects')} class="link text-sm text-muted">{t('cta.back')}</a>
         <p class="mt-12 text-base font-semibold">
-          {project.name}
+          <span translate="no">{project.name}</span>
           <span class="block font-normal text-muted">{project.context[locale]}</span>
         </p>
         <h1 class="text-display mt-6 max-w-[16ch]">{project.tagline[locale]}</h1>
