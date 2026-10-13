@@ -2,7 +2,6 @@ import type { Localized } from '@/i18n';
 
 export const profile = {
   name: 'Pedro Luis Soto Santos',
-  shortName: 'Pedro Luis Soto',
   role: { es: 'Ingeniero de IA', en: 'AI Engineer' } satisfies Localized,
   /** Titular de la cabecera: resume el hilo conductor del perfil (agentes que aprenden a decidir). */
   headline: {

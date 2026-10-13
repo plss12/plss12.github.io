@@ -81,8 +81,8 @@ export const ui = {
   'experience.present': { es: 'actualidad', en: 'present' },
   'education.title': { es: 'Formación', en: 'Education' },
   'education.photoAlt': {
-    es: 'Pedro Luis el día de su graduación, con traje y corbata verde, sonriendo.',
-    en: 'Pedro Luis on his graduation day, wearing a suit and a green tie, smiling.',
+    es: 'Pedro el día de su graduación, con traje y corbata verde, sonriendo.',
+    en: 'Pedro on his graduation day, wearing a suit and a green tie, smiling.',
   },
   'languages.title': { es: 'Idiomas', en: 'Languages' },
   'contact.title': { es: '¿Hablamos?', en: 'Let’s talk.' },
