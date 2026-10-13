@@ -50,43 +50,29 @@ export const techExperience: Role[] = [
   },
 ];
 
-/**
- * Etapa planificada para alcanzar un inglés avanzado. En la portada se resume en una línea
- * (ver `internationalSummary`); el detalle se mantiene para el CV.
- */
-export const internationalExperience: Role[] = [
-  {
-    company: 'InterWay',
-    title: { es: 'Monitor de inmersión en inglés', en: 'English Immersion Camp Counselor' },
-    location: { es: 'España', en: 'Spain' },
-    start: '2026-02',
-    end: '2026-08',
-    highlights: [
-      {
-        es: 'Gestión de grupos y actividades diarias íntegramente en inglés, en un entorno muy dinámico.',
-        en: 'Led groups and daily activities entirely in English in a fast-moving environment.',
-      },
-    ],
-  },
-  {
-    company: 'Accor',
-    title: { es: 'Front Office Assistant', en: 'Front Office Assistant' },
-    location: { es: 'Brisbane, Australia', en: 'Brisbane, Australia' },
-    start: '2025-03',
-    end: '2025-10',
-    highlights: [
-      {
-        es: 'Año de inmersión lingüística en un entorno multicultural y de atención al cliente.',
-        en: 'Immersive gap year in a multicultural, customer-facing environment.',
-      },
-    ],
-  },
-];
-
-export const internationalSummary = {
-  period: { start: '2025-03', end: '2026-08' },
-  text: {
-    es: 'Etapa internacional planificada para llevar mi inglés a nivel C1: vivir y trabajar en Brisbane (Australia) en atención al cliente con Accor y, después, monitor de inmersión lingüística con InterWay.',
-    en: 'A planned international stage to take my English to C1: living and working in Brisbane, Australia, in a customer-facing role with Accor, then as an English immersion counselor with InterWay.',
+/** Resumen de la etapa internacional, presentado en la portada y en el CV como una etapa más. */
+export const internationalStage = {
+  title: { es: 'Etapa internacional', en: 'International stage' } satisfies Localized,
+  location: { es: 'Australia y España', en: 'Australia and Spain' } satisfies Localized,
+  start: '2025-03',
+  end: '2026-08',
+  intro: {
+    es: 'Una etapa planificada para llevar mi inglés a nivel C1 y desarrollar habilidades de liderazgo, antes de volver de lleno a la IA.',
+    en: 'A planned stage to take my English to C1 and build leadership skills, before returning full-time to AI.',
   } satisfies Localized,
+  /** Versión de una línea para el CV, que debe caber en una página. */
+  short: {
+    es: 'Front Office Assistant en Accor (Brisbane, Australia) y monitor de inmersión lingüística en InterWay (España), íntegramente en inglés. Etapa planificada para alcanzar el C1 y desarrollar liderazgo.',
+    en: 'Front Office Assistant at Accor (Brisbane, Australia) and English immersion counselor at InterWay (Spain), working entirely in English. A planned stage to reach C1 and build leadership skills.',
+  } satisfies Localized,
+  highlights: [
+    {
+      es: 'Front Office Assistant en Accor (Brisbane, Australia): atención al cliente en un entorno multicultural y exigente, íntegramente en inglés.',
+      en: 'Front Office Assistant at Accor (Brisbane, Australia): customer-facing work in a fast-paced, multicultural environment, entirely in English.',
+    },
+    {
+      es: 'Monitor de inmersión lingüística en InterWay (España): gestión de grupos y actividades diarias en inglés, con foco en liderazgo y resolución de problemas.',
+      en: 'English immersion counselor at InterWay (Spain): leading groups and daily activities in English, with a focus on leadership and problem-solving.',
+    },
+  ] satisfies Localized[],
 };

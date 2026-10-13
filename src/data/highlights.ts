@@ -24,10 +24,10 @@ export const highlights: Highlight[] = [
     },
   },
   {
-    value: { es: '−50 %', en: '−50%' },
+    value: { es: 'La mitad de tiempo', en: 'Half the time' },
     context: {
-      es: 'de tiempo de procesamiento en los pipelines de datos de un gran banco.',
-      en: 'processing time on the data pipelines of a major bank.',
+      es: 'para procesar los datos que alimentan los modelos de riesgo de un gran banco, tras optimizar sus pipelines.',
+      en: 'to process the data feeding a major bank’s risk models, after I optimised its pipelines.',
     },
   },
 ];

@@ -5,7 +5,7 @@ lang: es
 project: lunar-rover-madrl
 ---
 
-import LunarRoutes from '@/components/visuals/LunarRoutes.astro';
+import LunarComparison from '@/components/visuals/LunarComparison.astro';
 import TrainingChart from '@/components/visuals/TrainingChart.astro';
 
 ## El problema
@@ -45,13 +45,11 @@ Entrené ambos modelos en mapas de 12 × 12 con tres rovers y una visión de tre
 
 DDDQL aprende de forma clara: pasa de recompensas negativas a positivas y cada vez completa más episodios con menos pasos. MAPPO, en cambio, no consigue que la recompensa deje de ser negativa en 6 millones de pasos.
 
-Después probé el modelo de DDDQL, ya sin exploración aleatoria, en cuatro mapas nuevos y en dos modos: sin conocer de antemano dónde están los objetivos y conociéndolos. **Resolvió los 8 escenarios y no hubo ni una colisión.** Este es el primero, redibujado con los datos reales de la prueba:
+Después probé el modelo de DDDQL, ya sin exploración aleatoria, en cuatro mapas nuevos y en dos modos: sin conocer de antemano dónde están los objetivos y conociéndolos. **Resolvió los 8 escenarios y no hubo ni una colisión.** Este es el primer mapa en sus dos modos, redibujado con las rutas reales de la prueba:
 
-<figure>
-  <LunarRoutes locale="es" />
-</figure>
+<LunarComparison locale="es" />
 
-Cuando los rovers conocen la posición de sus objetivos, las rutas se acortan mucho. En este mismo mapa, el total baja de 83 a 41 pasos.
+Sin conocer los objetivos, los rovers exploran de forma ordenada, primero hasta su mina y después hasta la mezcladora, sin volver a zonas ya visitadas. En cuanto los tienen a la vista, van directos. Si conocen sus posiciones desde el principio, se ahorran la exploración y el total baja de 83 a 41 pasos. Aun así, el rover 3 cruza un obstáculo grande para acortar camino, algo que el modelo todavía puede mejorar.
 
 ## Lo que aprendí
 

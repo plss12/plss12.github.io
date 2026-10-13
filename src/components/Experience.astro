@@ -1,7 +1,7 @@
 ---
 import { sectionIds, useTranslations, type Locale } from '@/i18n';
-import { formatMonth, yearRange } from '@/i18n/format';
-import { techExperience, internationalSummary } from '@/data/experience';
+import { formatMonth } from '@/i18n/format';
+import { techExperience, internationalStage as stage } from '@/data/experience';
 
 interface Props {
   locale: Locale;
@@ -39,11 +39,20 @@ const id = sectionIds.experience[locale];
           </li>
         ))
       }
-      <li class="grid gap-2 border-t border-line pt-10 md:grid-cols-[9.5rem_1fr] md:gap-x-10">
+      <li class="grid gap-2 md:grid-cols-[9.5rem_1fr] md:gap-x-10">
         <p class="text-sm text-muted tabular-nums md:pt-1">
-          {yearRange(internationalSummary.period.start, internationalSummary.period.end)}
+          <time datetime={stage.start}>{formatMonth(stage.start, locale)}</time>
+          {' – '}
+          <time datetime={stage.end}>{formatMonth(stage.end, locale)}</time>
         </p>
-        <p class="max-w-prose text-muted">{internationalSummary.text[locale]}</p>
+        <div>
+          <h3 class="text-xl leading-snug font-semibold [font-stretch:90%]">{stage.title[locale]}</h3>
+          <p class="text-sm text-muted">{stage.location[locale]}</p>
+          <p class="mt-4 max-w-prose text-muted">{stage.intro[locale]}</p>
+          <ul class="mt-3 grid max-w-prose gap-3 text-muted" role="list">
+            {stage.highlights.map((h) => <li>{h[locale]}</li>)}
+          </ul>
+        </div>
       </li>
     </ol>
   </div>

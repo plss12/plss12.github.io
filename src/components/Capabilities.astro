@@ -1,5 +1,5 @@
 ---
-import { routes, sectionIds, useTranslations, type Locale } from '@/i18n';
+import { sectionIds, useTranslations, type Locale } from '@/i18n';
 import { capabilities, toolkit } from '@/data/capabilities';
 
 interface Props {
@@ -27,7 +27,7 @@ const id = sectionIds.capabilities[locale];
               <p class="text-sm md:max-w-[14rem] md:pt-1 md:text-right">
                 <span class="sr-only">{t('capabilities.evidence')}: </span>
                 {item.evidence.map((ev) => {
-                  const href = ev.caseStudy ? routes.caseStudy(locale, ev.caseStudy) : ev.href;
+                  const href = ev.href;
                   return (
                     <span class="block">
                       {href ? (

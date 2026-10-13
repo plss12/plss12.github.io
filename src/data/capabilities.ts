@@ -2,8 +2,7 @@ import type { Localized } from '@/i18n';
 
 export interface Evidence {
   label: Localized;
-  /** Slug de un caso de estudio o URL externa. */
-  caseStudy?: string;
+  /** Enlace directo al código o al paquete; sin enlace si no es público. */
   href?: string;
 }
 
@@ -24,7 +23,16 @@ export const capabilities: Capability[] = [
       es: 'Diseño y entreno agentes que deciden por sí mismos y se coordinan con otros. He implementado desde cero DDDQL, MAPPO y AlphaZero, y he entrenado PPO y Rainbow DQN.',
       en: 'I design and train agents that decide on their own and coordinate with others. I’ve implemented DDDQL, MAPPO and AlphaZero from scratch, and trained PPO and Rainbow DQN.',
     },
-    evidence: [{ label: { es: 'TFM: Lunar-Rover-MADRL', en: 'Master’s thesis: Lunar-Rover-MADRL' }, caseStudy: 'lunar-rover-madrl' }],
+    evidence: [
+      {
+        label: { es: 'DDDQL y MAPPO en GitHub', en: 'DDDQL and MAPPO on GitHub' },
+        href: 'https://github.com/plss12/Lunar-Rover-MADRL/tree/main/gym_lunar_rover/algorithms',
+      },
+      {
+        label: { es: 'AlphaZero en GitHub', en: 'AlphaZero on GitHub' },
+        href: 'https://github.com/plss12/Connect-X-AlphaZero/tree/main/alphazero',
+      },
+    ],
   },
   {
     title: { es: 'Entornos de simulación para entrenar agentes', en: 'Simulation environments for agent training' },
@@ -32,7 +40,12 @@ export const capabilities: Capability[] = [
       es: 'Construyo el mundo en el que aprende el agente: estados, acciones, recompensas y escenarios aleatorios que evitan el sobreajuste.',
       en: 'I build the world the agent learns in: states, actions, rewards and randomised scenarios that prevent overfitting.',
     },
-    evidence: [{ label: { es: 'Simulador lunar con Gymnasium', en: 'Lunar simulator on Gymnasium' }, caseStudy: 'lunar-rover-madrl' }],
+    evidence: [
+      {
+        label: { es: 'Simulador lunar en GitHub', en: 'Lunar simulator on GitHub' },
+        href: 'https://github.com/plss12/Lunar-Rover-MADRL/tree/main/gym_lunar_rover/envs',
+      },
+    ],
   },
   {
     title: { es: 'Planificación y búsqueda con redes neuronales', en: 'Planning and search with neural networks' },
@@ -41,8 +54,8 @@ export const capabilities: Capability[] = [
       en: 'I combine search (MCTS, Minimax, ISMCTS) with neural networks so agents think before they act, as in AlphaZero.',
     },
     evidence: [
-      { label: { es: 'Connect-X AlphaZero', en: 'Connect-X AlphaZero' }, href: 'https://github.com/plss12/Connect-X-AlphaZero' },
-      { label: { es: 'TFG: pyplAI', en: 'Bachelor’s thesis: pyplAI' }, caseStudy: 'pyplai' },
+      { label: { es: 'Connect-X AlphaZero en GitHub', en: 'Connect-X AlphaZero on GitHub' }, href: 'https://github.com/plss12/Connect-X-AlphaZero' },
+      { label: { es: 'pyplAI en GitHub', en: 'pyplAI on GitHub' }, href: 'https://github.com/plss12/pyplAI' },
     ],
   },
   {
@@ -63,8 +76,8 @@ export const capabilities: Capability[] = [
   },
 ];
 
-/** Herramientas y áreas complementarias, sin niveles. */
+/** Herramientas y áreas complementarias, sin niveles ni repetir lo que ya se ve en capacidades y proyectos. */
 export const toolkit: Localized<string[]> = {
-  es: ['Python', 'PyTorch', 'TensorFlow', 'Gymnasium', 'scikit-learn', 'LLMs', 'RAG', 'MCP', 'Visión por computador', 'NLP', 'SQL', 'Docker', 'AWS', 'Git', 'Linux', 'CI/CD'],
-  en: ['Python', 'PyTorch', 'TensorFlow', 'Gymnasium', 'scikit-learn', 'LLMs', 'RAG', 'MCP', 'Computer vision', 'NLP', 'SQL', 'Docker', 'AWS', 'Git', 'Linux', 'CI/CD'],
+  es: ['PyTorch', 'TensorFlow', 'scikit-learn', 'Pandas', 'LLMs', 'RAG', 'MCP', 'Visión por computador', 'NLP', 'SQL', 'Docker', 'AWS', 'Git', 'Linux', 'CI/CD'],
+  en: ['PyTorch', 'TensorFlow', 'scikit-learn', 'Pandas', 'LLMs', 'RAG', 'MCP', 'Computer vision', 'NLP', 'SQL', 'Docker', 'AWS', 'Git', 'Linux', 'CI/CD'],
 };

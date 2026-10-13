@@ -39,7 +39,7 @@ En segundo plano: Kaggle básicos (no se muestran), Java, diseño (SolidWorks, P
 
 - **Top 10 mundial** en la competición ConnectX de Kaggle, con AlphaZero desde cero.
 - **Matrícula de Honor** en el TFM y en el TFG.
-- **−50 %** de tiempo de procesamiento en los pipelines de datos de un gran banco.
+- **La mitad de tiempo** para procesar los datos que alimentan los modelos de riesgo de un gran banco (−50 % tras optimizar sus pipelines).
 
 ## Formación
 
@@ -55,16 +55,16 @@ En segundo plano: Kaggle básicos (no se muestran), Java, diseño (SolidWorks, P
   - Pipelines ETL con Oracle Data Integrator y Python: **−50 % de tiempo de procesamiento**.
 - **Software Engineer, Deloitte**, Sevilla, ene 2023 – jun 2023
   - Seguimiento y coordinación de proyectos de desarrollo para el Ministerio de Sanidad.
-- **Etapa internacional** (2025–2026), planificada para alcanzar el C1: Front Office Assistant en Accor (Brisbane, mar–oct 2025) y monitor de inmersión en inglés en InterWay (feb–ago 2026). Se presenta breve y como decisión deliberada, sin duraciones inventadas.
+- **Etapa internacional** (mar 2025 – ago 2026, Australia y España), con título propio como el resto de etapas: planificada para alcanzar el C1 y desarrollar liderazgo. Front Office Assistant en Accor (Brisbane) y monitor de inmersión lingüística en InterWay. En el CV va resumida en una línea.
 
 ## Proyectos
 
-1. **Lunar-Rover-MADRL** (TFM, Matrícula de Honor). Protagonista de la portada y caso de estudio.
+1. **Lunar-Rover-MADRL** (TFM, Matrícula de Honor). Protagonista de la portada (mapa con los objetivos conocidos y explicación breve) y caso de estudio (comparación de algoritmos y de los dos modos del mapa).
    - Planificación de rutas multiagente con DRL para rovers lunares, como alternativa a la planificación centralizada.
    - Simulador propio con Gymnasium + Pygame. Mejoras clave: mapa de visitas, recompensas intermedias por campo de potencial y observaciones normalizadas que permiten generalizar.
    - DDDQL y MAPPO desde cero (NumPy, TensorFlow, Keras). Entrenamiento en mapas 12 × 12, 3 rovers, visión de 3 casillas.
    - Resultados reales: DDDQL pasa de −6,8 a +16,6 de recompensa media por acción en 3,75 M pasos; MAPPO se queda en negativo en 6 M. DDDQL resuelve **8 de 8** escenarios con **0 colisiones**; el primero suma 83 pasos (41 conociendo los objetivos).
-   - Datos: `src/data/metrics/*.csv` (del repo) y `src/data/lunar-scenario.ts` (figura 5.9 transcrita).
+   - Datos: `src/data/metrics/*.csv` (del repo) y `src/data/lunar-scenario.ts` (figuras 5.9 y 5.10 transcritas: modos `exploring` e `informed`).
 2. **pyplAI** (TFG, Matrícula de Honor). Caso de estudio.
    - Biblioteca en PyPI con Minimax (alfa-beta), MCTS-UCT, SO-ISMCTS y MO-ISMCTS.
    - 8 juegos de ejemplo y algoritmo genético para la colocación inicial del Stratego.

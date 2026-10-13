@@ -15,15 +15,9 @@ const headingId = `project-${project.slug}`;
 ---
 
 <article class="flex flex-col rounded-[1.75rem] bg-surface p-6 sm:p-10" aria-labelledby={headingId}>
-  <div class="visual flex items-center justify-center rounded-2xl bg-bg px-6 py-8 sm:px-10 sm:py-10 lg:flex-1">
+  <div class="visual flex h-64 items-center justify-center rounded-2xl bg-bg p-5 sm:h-80 sm:p-6">
     {project.visual === 'mcts-diagram' && <MctsDiagram locale={locale} />}
-    {
-      project.visual === 'connect4-board' && (
-        <div class="w-full max-w-[22rem]">
-          <Connect4Board locale={locale} />
-        </div>
-      )
-    }
+    {project.visual === 'connect4-board' && <Connect4Board locale={locale} />}
   </div>
 
   <p class="mt-8 text-base font-semibold">
@@ -44,7 +38,7 @@ const headingId = `project-${project.slug}`;
     }
   </dl>
 
-  <p class="flex flex-wrap items-center gap-x-6 gap-y-3 pt-8">
+  <p class="mt-auto flex flex-wrap items-center gap-x-6 gap-y-3 pt-8">
     {project.caseStudy && <a href={routes.caseStudy(locale, project.slug)} class="link font-semibold">{t('cta.caseStudy')}</a>}
     {project.links.map((link) => <a href={link.href} class="link font-semibold">{link.label[locale]}</a>)}
   </p>

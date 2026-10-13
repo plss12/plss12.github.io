@@ -34,7 +34,12 @@ const text = {
 const id = `c4-${locale}`;
 ---
 
-<svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby={`${id}-title ${id}-desc`} class="block h-auto w-full">
+<svg
+  viewBox={`0 0 ${W} ${H}`}
+  role="img"
+  aria-labelledby={`${id}-title ${id}-desc`}
+  class="mx-auto block h-full max-h-full w-auto max-w-full"
+>
   <title id={`${id}-title`}>{text.title[locale]}</title>
   <desc id={`${id}-desc`}>{text.desc[locale]}</desc>
   {

@@ -10,8 +10,8 @@ export const profile = {
     en: 'I teach machines to make decisions.',
   } satisfies Localized,
   intro: {
-    es: 'Soy Pedro, ingeniero de IA especializado en Python. Diseño agentes que aprenden por refuerzo, desde rovers lunares que se coordinan sin chocar hasta un AlphaZero entre los diez mejores de Kaggle.',
-    en: 'I’m Pedro, an AI engineer focused on Python. I build agents that learn through reinforcement, from lunar rovers that coordinate without colliding to an AlphaZero in Kaggle’s global top 10.',
+    es: 'Soy Pedro, ingeniero de IA especializado en Python. Trabajo con machine learning y aprendizaje por refuerzo para crear agentes que aprenden de su entorno y toman buenas decisiones.',
+    en: 'I’m Pedro, an AI engineer focused on Python. I work with machine learning and reinforcement learning to build agents that learn from their environment and make good decisions.',
   } satisfies Localized,
   summary: {
     es: 'Ingeniero de software con máster en Inteligencia Artificial y más de dos años de experiencia en datos y desarrollo en entornos empresariales. Me especializo en agentes y aprendizaje por refuerzo, con experiencia en llevar datos a producción para modelos de IA.',

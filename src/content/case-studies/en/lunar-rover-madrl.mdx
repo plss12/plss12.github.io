@@ -5,7 +5,7 @@ lang: en
 project: lunar-rover-madrl
 ---
 
-import LunarRoutes from '@/components/visuals/LunarRoutes.astro';
+import LunarComparison from '@/components/visuals/LunarComparison.astro';
 import TrainingChart from '@/components/visuals/TrainingChart.astro';
 
 ## The problem
@@ -45,13 +45,11 @@ I trained both models on 12 × 12 maps with three rovers and a three-cell field 
 
 DDDQL clearly learns: it goes from negative to positive rewards and completes more episodes in fewer steps. MAPPO, on the other hand, never gets its reward above zero in 6 million steps.
 
-I then tested the DDDQL model, with random exploration switched off, on four new maps in two modes: without knowing where the goals are, and knowing them in advance. **It solved all 8 scenarios without a single collision.** This is the first one, redrawn from the real test data:
+I then tested the DDDQL model, with random exploration switched off, on four new maps in two modes: without knowing where the goals are, and knowing them in advance. **It solved all 8 scenarios without a single collision.** This is the first map in both modes, redrawn from the real test routes:
 
-<figure>
-  <LunarRoutes locale="en" />
-</figure>
+<LunarComparison locale="en" />
 
-When the rovers know where their goals are, routes get much shorter. On this same map, the total drops from 83 to 41 steps.
+Without knowing their goals, the rovers explore methodically, first towards their mine and then towards the mixer, without revisiting areas they’ve already seen. As soon as a goal is in sight, they head straight for it. When they know the positions from the start, they skip exploration and the total drops from 83 to 41 steps. Even so, rover 3 crosses a large obstacle to cut its route short, something the model can still improve.
 
 ## What I learned
 

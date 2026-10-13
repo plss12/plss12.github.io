@@ -1,0 +1,40 @@
+---
+/* Los dos modos de la misma prueba, lado a lado, con una leyenda común. */
+import type { Locale, Localized } from '@/i18n';
+import { totalSteps, type ScenarioMode } from '@/data/lunar-scenario';
+import LunarMap from '@/components/visuals/LunarMap.astro';
+import LunarLegend from '@/components/visuals/LunarLegend.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const panels: { mode: ScenarioMode; title: Localized }[] = [
+  { mode: 'exploring', title: { es: 'Sin conocer los objetivos', en: 'Goals unknown' } },
+  { mode: 'informed', title: { es: 'Conociendo los objetivos', en: 'Goals known' } },
+];
+const stepsLabel = { es: 'pasos en total', en: 'steps in total' } satisfies Localized;
+---
+
+<div>
+  <div class="grid gap-8 sm:grid-cols-2 sm:gap-6">
+    {
+      panels.map((panel) => (
+        <figure>
+          <LunarMap locale={locale} mode={panel.mode} />
+          <figcaption class="mt-3 flex items-baseline justify-between gap-4 text-sm">
+            <span class="font-semibold text-ink">{panel.title[locale]}</span>
+            <span class="text-muted tabular-nums">
+              {totalSteps(panel.mode)} {stepsLabel[locale]}
+            </span>
+          </figcaption>
+        </figure>
+      ))
+    }
+  </div>
+  <div class="mt-8">
+    <LunarLegend locale={locale} />
+  </div>
+</div>

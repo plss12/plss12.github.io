@@ -4,10 +4,10 @@
  * (scripts/cv-pdf.mjs). Siempre en claro, sin teléfono ni datos privados.
  */
 import { routes, type Locale, type Localized } from '@/i18n';
-import { formatMonth, yearRange } from '@/i18n/format';
+import { formatMonth } from '@/i18n/format';
 import { profile } from '@/data/profile';
 import { featuredProject, projects, kaggleResults } from '@/data/projects';
-import { techExperience, internationalSummary, type Role } from '@/data/experience';
+import { techExperience, internationalStage, type Role } from '@/data/experience';
 import { education } from '@/data/education';
 import { capabilities, toolkit } from '@/data/capabilities';
 
@@ -31,7 +31,7 @@ const text = {
   portfolio: { es: 'Portfolio y casos de estudio', en: 'Portfolio and case studies' },
 } satisfies Record<string, Localized>;
 
-const period = (role: Role) => `${formatMonth(role.start, locale)} – ${formatMonth(role.end, locale)}`;
+const period = (role: Pick<Role, 'start' | 'end'>) => `${formatMonth(role.start, locale)} – ${formatMonth(role.end, locale)}`;
 const allProjects = [featuredProject, ...projects];
 const host = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
 ---
@@ -102,10 +102,13 @@ const host = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\
       }
       <div class="cv-item">
         <div class="cv-item-head">
-          <h3>{text.international[locale]}</h3>
-          <span class="cv-muted">{yearRange(internationalSummary.period.start, internationalSummary.period.end)}</span>
+          <h3>
+            {internationalStage.title[locale]}
+            <span class="cv-muted">, {internationalStage.location[locale]}</span>
+          </h3>
+          <span class="cv-muted">{period(internationalStage)}</span>
         </div>
-        <p>{internationalSummary.text[locale]}</p>
+        <p>{internationalStage.short[locale]}</p>
       </div>
     </section>
 

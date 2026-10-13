@@ -18,14 +18,15 @@ const phases: Localized[] = [
   { es: '4. Retropropagación', en: '4. Backpropagation' },
 ];
 
-/* Árbol común: raíz, dos hijos y dos nietos bajo el primer hijo. */
+type P = { x: number; y: number };
+/* Árbol común: raíz, dos hijos y dos nietos; el camino elegido baja por la izquierda. */
 const nodes = {
-  root: { x: 80, y: 24 },
-  a: { x: 48, y: 74 },
-  b: { x: 112, y: 74 },
-  a1: { x: 26, y: 124 },
-  a2: { x: 70, y: 124 },
-};
+  root: { x: 80, y: 12 },
+  a: { x: 56, y: 42 },
+  b: { x: 104, y: 42 },
+  a1: { x: 38, y: 72 },
+  a2: { x: 74, y: 72 },
+} satisfies Record<string, P>;
 type NodeKey = keyof typeof nodes;
 const edges: [NodeKey, NodeKey][] = [
   ['root', 'a'],
@@ -33,14 +34,35 @@ const edges: [NodeKey, NodeKey][] = [
   ['a', 'a1'],
   ['a', 'a2'],
 ];
-const onPath = new Set<string>(['root-a', 'a-a2']);
+const onPath = new Set(['root-a', 'a-a2']);
 const pathNodes = new Set<NodeKey>(['root', 'a', 'a2']);
-const newNode = { x: 92, y: 172 };
+const leaf: P = { x: 92, y: 102 };
+const terminal: P = { x: 92, y: 130 };
 
-const W = 160;
-const H = 250;
-const GAP_X = 24;
-const GAP_Y = 16;
+const R = 7;
+const W = 166;
+const H = 166;
+const GAP_X = 10;
+const GAP_Y = 12;
+const LABEL_Y = H - 6;
+
+/* Flecha de retropropagación: paralela a la rama, desplazada a la derecha y apuntando al padre. */
+function backArrow(child: P, parent: P) {
+  const dx = parent.x - child.x;
+  const dy = parent.y - child.y;
+  const len = Math.hypot(dx, dy);
+  const ux = dx / len;
+  const uy = dy / len;
+  const nx = -uy;
+  const ny = ux;
+  const off = 10;
+  const trim = R + 3;
+  const sx = child.x + ux * trim + nx * off;
+  const sy = child.y + uy * trim + ny * off;
+  const ex = parent.x - ux * trim + nx * off;
+  const ey = parent.y - uy * trim + ny * off;
+  return `M${sx.toFixed(1)},${sy.toFixed(1)} L${ex.toFixed(1)},${ey.toFixed(1)}`;
+}
 
 const text = {
   title: { es: 'Las cuatro fases de Monte Carlo Tree Search', en: 'The four phases of Monte Carlo Tree Search' },
@@ -56,10 +78,15 @@ const id = `mcts-${locale}`;
   viewBox={`0 0 ${W * 2 + GAP_X} ${H * 2 + GAP_Y}`}
   role="img"
   aria-labelledby={`${id}-title ${id}-desc`}
-  class="mx-auto block h-auto w-full max-w-[24rem]"
+  class="mx-auto block h-full max-h-full w-auto max-w-full"
 >
   <title id={`${id}-title`}>{text.title[locale]}</title>
   <desc id={`${id}-desc`}>{text.desc[locale]}</desc>
+  <defs>
+    <marker id={`${id}-arrow`} viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M1,1 L8,5 L1,9" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+    </marker>
+  </defs>
   {
     phases.map((phase, i) => (
       <g transform={`translate(${(i % 2) * (W + GAP_X)} ${Math.floor(i / 2) * (H + GAP_Y)})`}>
@@ -72,7 +99,7 @@ const id = `mcts-${locale}`;
               x2={nodes[to].x}
               y2={nodes[to].y}
               stroke={on ? 'var(--ink)' : 'var(--line)'}
-              stroke-width={on ? 3 : 2}
+              stroke-width={on ? 2.5 : 2}
             />
           );
         })}
@@ -80,24 +107,26 @@ const id = `mcts-${locale}`;
           <line
             x1={nodes.a2.x}
             y1={nodes.a2.y}
-            x2={newNode.x}
-            y2={newNode.y}
+            x2={leaf.x}
+            y2={leaf.y}
             stroke="var(--ink)"
-            stroke-width="3"
-            stroke-dasharray={i === 1 ? '5 5' : undefined}
+            stroke-width="2.5"
+            stroke-dasharray={i === 1 ? '4 4' : undefined}
           />
         )}
         {i === 2 && (
           <>
-            <path
-              d={`M${newNode.x},${newNode.y + 12} c -16,10 16,18 0,28`}
-              fill="none"
+            <line
+              x1={leaf.x}
+              y1={leaf.y + R + 2}
+              x2={terminal.x}
+              y2={terminal.y - 7}
               stroke="var(--muted)"
               stroke-width="2"
-              stroke-dasharray="2 5"
+              stroke-dasharray="1 5"
               stroke-linecap="round"
             />
-            <rect x={newNode.x - 7} y={newNode.y + 42} width="14" height="14" rx="2" fill="var(--muted)" />
+            <rect x={terminal.x - 5} y={terminal.y - 5} width="10" height="10" rx="2" fill="var(--muted)" />
           </>
         )}
         {(Object.keys(nodes) as NodeKey[]).map((key) => {
@@ -106,7 +135,7 @@ const id = `mcts-${locale}`;
             <circle
               cx={nodes[key].x}
               cy={nodes[key].y}
-              r="10"
+              r={R}
               fill={on ? 'var(--ink)' : 'var(--bg)'}
               stroke={on ? 'var(--ink)' : 'var(--muted)'}
               stroke-width="2"
@@ -115,26 +144,27 @@ const id = `mcts-${locale}`;
         })}
         {i >= 1 && (
           <circle
-            cx={newNode.x}
-            cy={newNode.y}
-            r="10"
+            cx={leaf.x}
+            cy={leaf.y}
+            r={R}
             fill={i === 1 ? 'var(--bg)' : 'var(--ink)'}
             stroke="var(--ink)"
             stroke-width="2"
-            stroke-dasharray={i === 1 ? '4 3' : undefined}
+            stroke-dasharray={i === 1 ? '3 3' : undefined}
           />
         )}
         {i === 3 && (
-          <g stroke="var(--ink)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path d={`M${newNode.x + 22},${newNode.y - 6} L${nodes.a2.x + 26},${nodes.a2.y + 10}`} />
-            <path d={`M${nodes.a2.x + 26},${nodes.a2.y + 10} l 0,9 m 0,-9 l 8,4`} />
-            <path d={`M${nodes.a2.x + 4},${nodes.a2.y - 22} L${nodes.a.x + 14},${nodes.a.y + 14}`} />
-            <path d={`M${nodes.a.x + 14},${nodes.a.y + 14} l 0,-9 m 0,9 l 8,-3`} />
-            <path d={`M${nodes.a.x + 28},${nodes.a.y - 20} L${nodes.root.x + 4},${nodes.root.y + 16}`} />
-            <path d={`M${nodes.root.x + 4},${nodes.root.y + 16} l 1,-9 m -1,9 l 8,-4`} />
+          <g fill="none" stroke="var(--ink)" stroke-width="1.75" stroke-linecap="round">
+            {[
+              [leaf, nodes.a2],
+              [nodes.a2, nodes.a],
+              [nodes.a, nodes.root],
+            ].map(([child, parent]) => (
+              <path d={backArrow(child!, parent!)} marker-end={`url(#${id}-arrow)`} />
+            ))}
           </g>
         )}
-        <text x="8" y={H - 10} font-size="15" font-weight="600" fill="var(--ink)">
+        <text x={W / 2} y={LABEL_Y} text-anchor="middle" font-size="15" font-weight="600" fill="var(--ink)">
           {phase[locale]}
         </text>
       </g>

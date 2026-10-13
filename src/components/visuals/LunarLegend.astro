@@ -1,0 +1,79 @@
+---
+import type { Locale, Localized } from '@/i18n';
+import { rovers, type ScenarioMode } from '@/data/lunar-scenario';
+
+interface Props {
+  locale: Locale;
+  /** Si se indica, muestra los pasos de cada rover en ese escenario. */
+  mode?: ScenarioMode;
+}
+
+const { locale, mode } = Astro.props;
+const series = ['var(--series-1)', 'var(--series-2)', 'var(--series-3)'];
+
+const text = {
+  terrain: { es: 'Terreno', en: 'Terrain' },
+  free: { es: 'Libre', en: 'Clear' },
+  small: { es: 'Obstáculo pequeño: se cruza con más gasto de energía', en: 'Small obstacle: crossable at a higher energy cost' },
+  large: { es: 'Obstáculo grande: puede averiar el rover', en: 'Large obstacle: can break the rover' },
+  rovers: { es: 'Rovers', en: 'Rovers' },
+  rover: { es: 'Rover', en: 'Rover' },
+  steps: { es: 'pasos', en: 'steps' },
+  start: { es: 'Salida', en: 'Start' },
+  mine: { es: 'Mina asignada', en: 'Assigned mine' },
+  mixer: { es: 'Mezcladora, destino común', en: 'Mixer, the shared destination' },
+} satisfies Record<string, Localized>;
+
+const routes = mode ? rovers(mode) : [];
+---
+
+<div class="grid gap-x-10 gap-y-6 text-sm text-muted sm:grid-cols-2">
+  <div>
+    <p class="font-semibold text-ink">{text.terrain[locale]}</p>
+    <ul class="mt-2 grid gap-2" role="list">
+      <li class="flex items-center gap-3">
+        <span class="size-3.5 shrink-0 rounded-[3px] bg-surface ring-1 ring-line" aria-hidden="true"></span>
+        {text.free[locale]}
+      </li>
+      <li class="flex items-center gap-3">
+        <span class="size-3.5 shrink-0 rounded-[3px]" style="background:color-mix(in srgb, var(--ink) 16%, var(--surface))" aria-hidden="true"></span>
+        {text.small[locale]}
+      </li>
+      <li class="flex items-center gap-3">
+        <span class="size-3.5 shrink-0 rounded-[3px]" style="background:color-mix(in srgb, var(--ink) 62%, var(--surface))" aria-hidden="true"></span>
+        {text.large[locale]}
+      </li>
+    </ul>
+  </div>
+  <div>
+    <p class="font-semibold text-ink">{text.rovers[locale]}</p>
+    <ul class="mt-2 grid gap-2" role="list">
+      {
+        series.map((color, i) => (
+          <li class="flex items-center gap-3">
+            <span class="h-[3px] w-3.5 shrink-0 rounded-full" style={`background:${color}`} aria-hidden="true" />
+            <span>
+              {text.rover[locale]} {i + 1}
+              {routes[i] && `: ${routes[i].path.length - 1} ${text.steps[locale]}`}
+            </span>
+          </li>
+        ))
+      }
+      <li class="flex items-center gap-3">
+        <span class="size-3.5 shrink-0 rounded-full bg-muted" aria-hidden="true"></span>
+        {text.start[locale]}
+      </li>
+      <li class="flex items-center gap-3">
+        <span class="ml-0.5 size-2.5 shrink-0 rotate-45 rounded-[2px] border-2 border-muted" aria-hidden="true"></span>
+        {text.mine[locale]}
+      </li>
+      <li class="flex items-center gap-3">
+        <svg viewBox="0 0 16 16" class="size-3.5 shrink-0" aria-hidden="true">
+          <polygon points="8,1 14,4.5 14,11.5 8,15 2,11.5 2,4.5" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"></polygon>
+          <circle cx="8" cy="8" r="2" fill="var(--ink)"></circle>
+        </svg>
+        {text.mixer[locale]}
+      </li>
+    </ul>
+  </div>
+</div>
