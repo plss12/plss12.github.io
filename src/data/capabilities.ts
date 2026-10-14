@@ -35,6 +35,14 @@ export const capabilities: Capability[] = [
     ],
   },
   {
+    title: { es: 'Herramientas para agentes LLM con MCP', en: 'Tools for LLM agents with MCP' },
+    description: {
+      es: 'Conecto modelos de lenguaje con herramientas reales mediante el Model Context Protocol: esquemas tipados, salida estructurada, errores que el modelo puede corregir y tests de extremo a extremo.',
+      en: 'I connect language models to real tools through the Model Context Protocol: typed schemas, structured output, errors the model can recover from and end-to-end tests.',
+    },
+    evidence: [{ label: { es: 'pyplAI-MCP en GitHub', en: 'pyplAI-MCP on GitHub' }, href: 'https://github.com/plss12/pyplAI-MCP' }],
+  },
+  {
     title: { es: 'Entornos de simulación para entrenar agentes', en: 'Simulation environments for agent training' },
     description: {
       es: 'Construyo el mundo en el que aprende el agente: estados, acciones, recompensas y escenarios aleatorios que evitan el sobreajuste.',
@@ -78,6 +86,6 @@ export const capabilities: Capability[] = [
 
 /** Herramientas y áreas complementarias, sin niveles ni repetir lo que ya se ve en capacidades y proyectos. */
 export const toolkit: Localized<string[]> = {
-  es: ['PyTorch', 'TensorFlow', 'scikit-learn', 'Pandas', 'LLMs', 'RAG', 'MCP', 'Visión por computador', 'NLP', 'SQL', 'Docker', 'AWS', 'Git', 'Linux', 'CI/CD'],
-  en: ['PyTorch', 'TensorFlow', 'scikit-learn', 'Pandas', 'LLMs', 'RAG', 'MCP', 'Computer vision', 'NLP', 'SQL', 'Docker', 'AWS', 'Git', 'Linux', 'CI/CD'],
+  es: ['PyTorch', 'TensorFlow', 'scikit-learn', 'Pandas', 'LLMs', 'RAG', 'Visión por computador', 'NLP', 'SQL', 'Docker', 'AWS', 'Git', 'Linux', 'CI/CD'],
+  en: ['PyTorch', 'TensorFlow', 'scikit-learn', 'Pandas', 'LLMs', 'RAG', 'Computer vision', 'NLP', 'SQL', 'Docker', 'AWS', 'Git', 'Linux', 'CI/CD'],
 };

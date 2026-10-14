@@ -11,7 +11,7 @@ export interface ProjectFact {
 }
 
 /** Pieza visual que acompaña al proyecto en la portada. */
-export type ProjectVisual = 'lunar-simulator' | 'mcts-diagram' | 'connect4-board';
+export type ProjectVisual = 'lunar-simulator' | 'mcts-diagram' | 'phantom-analysis' | 'connect4-board';
 
 export interface Project {
   /** Identificador estable; si tiene caso de estudio, es también su slug. */
@@ -92,6 +92,33 @@ export const projects: Project[] = [
     ],
     visual: 'mcts-diagram',
     caseStudy: true,
+  },
+  {
+    slug: 'pyplai-mcp',
+    name: 'pyplAI-MCP',
+    context: {
+      es: 'Proyecto personal. Servidor MCP open source.',
+      en: 'Personal project. Open-source MCP server.',
+    },
+    tagline: {
+      es: 'La búsqueda de pyplAI, como herramienta para cualquier LLM.',
+      en: 'pyplAI’s search, as a tool for any LLM.',
+    },
+    summary: {
+      es: 'Un servidor MCP que pone los algoritmos de pyplAI al alcance de asistentes como Claude. El modelo juega, pide el análisis de cada posición y explica su jugada con las cifras de la búsqueda. En Phantom, con las fichas del rival ocultas, el análisis solo usa lo que el jugador sabe.',
+      en: 'An MCP server that puts pyplAI’s algorithms in the hands of assistants like Claude. The model plays, asks for an analysis of each position and explains its move with the numbers from the search. In Phantom, where the opponent’s stones are hidden, the analysis only uses what the player knows.',
+    },
+    facts: [
+      { value: { es: '6', en: '6' }, label: { es: 'herramientas MCP', en: 'MCP tools' } },
+      { value: { es: '3', en: '3' }, label: { es: 'juegos, uno con información oculta', en: 'games, one with hidden information' } },
+    ],
+    stack: ['Python', 'MCP', 'Pydantic', 'pyplAI'],
+    links: [
+      { label: github, href: 'https://github.com/plss12/pyplAI-MCP' },
+      { label: { es: 'Ver en PyPI', en: 'View on PyPI' }, href: 'https://pypi.org/project/pyplai-mcp/' },
+    ],
+    visual: 'phantom-analysis',
+    caseStudy: false,
   },
   {
     slug: 'connect-x-alphazero',

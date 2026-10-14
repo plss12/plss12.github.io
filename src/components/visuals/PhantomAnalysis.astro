@@ -1,0 +1,101 @@
+---
+/*
+ * Una posición de Phantom (4,4,4) vista por el jugador y el análisis que devuelve
+ * analyze_position en pyplAI-MCP. Datos reales: MO-ISMCTS durante 5 s (13 449 iteraciones)
+ * tras la apertura b2, c2, c2 (choca con una ficha oculta), c3, b3, a1, b1.
+ */
+import type { Locale, Localized } from '@/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+/* Tablero desde el punto de vista del jugador 1: Y propias, o rivales descubiertas, . desconocidas. */
+const board = ['Y...', '.Yo.', '..Y.', '....'];
+const best = { row: 3, col: 3 };
+const analysis = [
+  { move: 'd4', value: 0.9167 },
+  { move: 'b4', value: 0.6557 },
+  { move: 'c4', value: 0.6557 },
+  { move: 'd2', value: 0.6379 },
+];
+
+const C = 44;
+const X0 = 30;
+const Y0 = 44;
+const R = 14;
+const LIST_X = 232;
+const BAR_X = 266;
+const BAR_W = 110;
+const ROW_H = 34;
+const W = BAR_X + BAR_W + 48;
+const H = Y0 + C * 4 + 8;
+const cx = (col: number) => X0 + col * C + C / 2;
+const cy = (row: number) => Y0 + row * C + C / 2;
+const percent = (value: number) => (locale === 'es' ? `${Math.round(value * 100)} %` : `${Math.round(value * 100)}%`);
+
+const text = {
+  title: { es: 'Análisis de una jugada en Phantom sin ver las fichas del rival', en: 'Analysing a Phantom move without seeing the opponent’s stones' },
+  heading: { es: 'Victorias simuladas', en: 'Simulated wins' },
+  desc: {
+    es: `Tablero de 4 × 4 visto por el jugador: sus fichas en a1, b2 y c3, una ficha rival descubierta en c2 y el resto de casillas desconocidas. MO-ISMCTS valora cada jugada sin ver las fichas ocultas: d4, que completa la diagonal, gana el ${percent(0.9167)} de las partidas simuladas; b4 y c4, el ${percent(0.6557)}, y d2, el ${percent(0.6379)}.`,
+    en: `A 4 × 4 board as the player sees it: their stones on a1, b2 and c3, one opponent stone discovered on c2 and every other cell unknown. MO-ISMCTS rates each move without seeing the hidden stones: d4, which completes the diagonal, wins ${percent(0.9167)} of the simulated games; b4 and c4, ${percent(0.6557)}; and d2, ${percent(0.6379)}.`,
+  },
+} satisfies Record<string, Localized>;
+const id = `phantom-${locale}`;
+---
+
+<svg
+  viewBox={`0 0 ${W} ${H}`}
+  role="img"
+  aria-labelledby={`${id}-title ${id}-desc`}
+  class="mx-auto block h-full max-h-full w-auto max-w-full"
+>
+  <title id={`${id}-title`}>{text.title[locale]}</title>
+  <desc id={`${id}-desc`}>{text.desc[locale]}</desc>
+  {
+    ['a', 'b', 'c', 'd'].map((letter, col) => (
+      <text x={cx(col)} y={Y0 - 14} text-anchor="middle" font-size="14" fill="var(--muted)">
+        {letter}
+      </text>
+    ))
+  }
+  {
+    [1, 2, 3, 4].map((number, row) => (
+      <text x={X0 - 12} y={cy(row) + 5} text-anchor="middle" font-size="14" fill="var(--muted)">
+        {number}
+      </text>
+    ))
+  }
+  {
+    board.map((line, row) =>
+      [...line].map((cell, col) => {
+        if (cell === 'Y') return <circle cx={cx(col)} cy={cy(row)} r={R} fill="var(--ink)" />;
+        if (cell === 'o') return <circle cx={cx(col)} cy={cy(row)} r={R - 2} fill="none" stroke="var(--ink)" stroke-width="3" />;
+        return <circle cx={cx(col)} cy={cy(row)} r={R} fill="color-mix(in srgb, var(--ink) 8%, transparent)" />;
+      }),
+    )
+  }
+  <circle cx={cx(best.col)} cy={cy(best.row)} r={R} fill="none" stroke="var(--ink)" stroke-width="2" stroke-dasharray="4 4" />
+
+  <text x={LIST_X} y={Y0 - 14} font-size="14" fill="var(--muted)">{text.heading[locale]}</text>
+  {
+    analysis.map((row, i) => {
+      const y = Y0 + 8 + i * ROW_H;
+      return (
+        <g>
+          <text x={LIST_X} y={y + 12} font-size="15" font-weight="600" fill="var(--ink)">
+            {row.move}
+          </text>
+          <rect x={BAR_X} y={y} width={BAR_W} height="16" rx="3" fill="color-mix(in srgb, var(--ink) 8%, transparent)" />
+          <rect x={BAR_X} y={y} width={BAR_W * row.value} height="16" rx="3" fill={i === 0 ? 'var(--ink)' : 'var(--muted)'} />
+          <text x={BAR_X + BAR_W + 8} y={y + 13} font-size="14" fill="var(--ink)">
+            {percent(row.value)}
+          </text>
+        </g>
+      );
+    })
+  }
+</svg>
