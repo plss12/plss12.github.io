@@ -21,7 +21,7 @@ Web personal de portfolio + CV para búsqueda activa de empleo como AI Engineer 
 - **Tokens** en `src/styles/global.css`: paleta monocroma (`--bg`, `--surface`, `--ink`, `--muted`, `--line`), `--stage*` para las secciones siempre oscuras y `--series-1..3` (validados para daltonismo con la skill `dataviz`) **solo para datos**. Modo oscuro automático por `prefers-color-scheme`.
 - **Tipografía:** una familia, Instrument Sans variable (`wdth` 75–100, `wght` 400–700), autoalojada con la Fonts API. Utilidades: `text-display`, `text-title`, `text-subtitle`, `text-lead`; layout con `container-page` y `section-space`; enlaces `link` y botones `btn`.
 - Evitar: mayúsculas en etiquetas, antetítulos, numeración decorativa, metadatos unidos con «·», flechas «→», tarjetas idénticas con sombra, animaciones al cargar o al hacer scroll.
-- Visuales en `src/components/visuals/`: SVG estáticos y accesibles (`<title>`/`<desc>`, tabla de datos en la gráfica). `LunarMap` + `LunarLegend` en la portada (modo `informed`); `LunarComparison` y `TrainingChart` solo en el caso de estudio. Sin JavaScript en el navegador.
+- Visuales en `src/components/visuals/`: SVG estáticos y accesibles (`<title>`/`<desc>`, tabla de datos en la gráfica). `LunarMap` + `LunarLegend` en la portada (modo `informed`); `LunarComparison` y `TrainingChart` solo en el caso de estudio del TFM; `BenchmarkChart` (barras divergentes victorias/empates/derrotas desde `src/data/metrics/pyplai-mcp-benchmark.csv`, copia de `benchmarks/results.csv` del repo pyplAI-MCP) en el de pyplAI-MCP. Sin JavaScript en el navegador.
 
 ## Objetivos de calidad
 

@@ -75,7 +75,9 @@ En segundo plano: Kaggle básicos (no se muestran), Java, diseño (SolidWorks, P
    - Biblioteca en PyPI con Minimax (alfa-beta), MCTS-UCT, SO-ISMCTS y MO-ISMCTS.
    - 8 juegos de ejemplo y algoritmo genético para la colocación inicial del Stratego.
 3. **pyplAI-MCP**: servidor MCP open source que expone pyplAI como herramientas para LLMs.
-   - 6 herramientas (`list_games`, `new_game`, `get_state`, `play_move`, `analyze_position`, `end_game`), el recurso `rules://{game}` y el prompt `play_game`. Salida estructurada con esquema.
+   - 7 herramientas (`list_games`, `get_rules`, `new_game`, `get_state`, `play_move`, `analyze_position`, `end_game`), el recurso `rules://{game}` y el prompt `play_game`. Salida estructurada con esquema. `get_rules` existe porque el modelo en Claude Desktop no lee recursos (visto en la demo).
+   - Benchmark (`benchmarks/` del repo, 960 partidas, 14-10-2026): Llama 3.2 3B en local con Ollama, con y sin `analyze_position`. Solo pierde el 100 % en tres en raya y Ultimate contra MCTS; con la búsqueda, en tres en raya pasa a 31 % de derrotas (sigue la recomendación el 80 % de las veces; en las 34 partidas en que la siguió siempre, 34 tablas) y en Ultimate gana el 8 % frente al 90 % de la búsqueda sola (analiza antes del 55 % de sus jugadas y sigue el 61 %). Phantom: solo 57/1/42 % (V/E/D), con búsqueda 45/28/27 %, búsqueda sola 48/32/20 %. Conclusión: la herramienta ayuda en la medida en que el modelo se fía de ella.
+   - Demo: partida de Phantom contra MO-ISMCTS jugada por Claude desde Claude Desktop (tablas); destapó dos fallos del servidor, corregidos en el commit 23ca07c.
    - 3 juegos: tres en raya, Ultimate y Phantom (4,4,4), con información oculta: el análisis usa ISMCTS y un test comprueba que no se filtran fichas ocultas.
    - Visual de la tarjeta: análisis real de MO-ISMCTS (5 s, 13 449 iteraciones) en una posición de Phantom.
    - Publicado en GitHub (https://github.com/plss12/pyplAI-MCP); se instala con `uvx --from git+...`.

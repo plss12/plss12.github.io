@@ -1,0 +1,210 @@
+---
+/*
+ * Resultados reales del benchmark de pyplAI-MCP (benchmarks/results.csv del repo, 960 partidas):
+ * victorias, empates y derrotas de cada jugador en cada juego. Barras apiladas divergentes:
+ * victorias y derrotas con --series-1 y --series-2 (validadas para daltonismo), empates en gris neutro.
+ * SVG estático, sin JavaScript; los <title> de cada segmento dan el detalle al pasar el ratón.
+ */
+import type { Locale, Localized } from '@/i18n';
+import csv from '@/data/metrics/pyplai-mcp-benchmark.csv?raw';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+type Outcome = 'win' | 'draw' | 'loss';
+const [header = '', ...lines] = csv.trim().split(/\r?\n/);
+const cols = header.split(',');
+const rows = lines.map((line) => {
+  const cells = line.split(',');
+  return { game: cells[cols.indexOf('game')]!, player: cells[cols.indexOf('condition')]!, result: cells[cols.indexOf('result')] as Outcome };
+});
+
+const games: { id: string; name: Localized }[] = [
+  { id: 'tictactoe', name: { es: 'Tres en raya, contra MCTS', en: 'Tic-tac-toe, against MCTS' } },
+  { id: 'ultimate', name: { es: 'Ultimate, contra MCTS', en: 'Ultimate, against MCTS' } },
+  { id: 'phantom', name: { es: 'Phantom, contra MO-ISMCTS', en: 'Phantom, against MO-ISMCTS' } },
+];
+const players: { id: string; name: Localized }[] = [
+  { id: 'llm', name: { es: 'Llama solo', en: 'Llama alone' } },
+  { id: 'llm+search', name: { es: 'Llama + búsqueda', en: 'Llama + search' } },
+  { id: 'search', name: { es: 'Solo búsqueda', en: 'Search alone' } },
+  { id: 'random', name: { es: 'Al azar', en: 'Random' } },
+];
+const outcomes: { id: Outcome; name: Localized; fill: string }[] = [
+  { id: 'win', name: { es: 'Victorias', en: 'Wins' }, fill: 'var(--series-1)' },
+  { id: 'draw', name: { es: 'Empates', en: 'Draws' }, fill: 'var(--chart-neutral)' },
+  { id: 'loss', name: { es: 'Derrotas', en: 'Losses' }, fill: 'var(--series-2)' },
+];
+
+const results = games.map((game) => ({
+  ...game,
+  players: players.map((player) => {
+    const own = rows.filter((r) => r.game === game.id && r.player === player.id);
+    const count = (o: Outcome) => own.filter((r) => r.result === o).length;
+    return { ...player, games: own.length, counts: { win: count('win'), draw: count('draw'), loss: count('loss') } };
+  }),
+}));
+
+const pct = (n: number, total: number) => Math.round((100 * n) / total);
+const percent = (n: number, total: number) => (locale === 'es' ? `${pct(n, total)} %` : `${pct(n, total)}%`);
+
+const W = 400;
+const LABEL_W = 116;
+const BAR_X = LABEL_W;
+const BAR_W = W - LABEL_W;
+const BAR_H = 20;
+const ROW_H = 28;
+const TITLE_H = 26;
+const BLOCK_GAP = 22;
+const BLOCK_H = TITLE_H + players.length * ROW_H;
+const H = games.length * BLOCK_H + (games.length - 1) * BLOCK_GAP;
+const GAP = 2;
+/* Solo se rotula un segmento si el número cabe con holgura. */
+const MIN_LABEL_W = 34;
+
+function segments(counts: Record<Outcome, number>, total: number) {
+  let x = BAR_X;
+  const visible = outcomes.filter((o) => counts[o.id] > 0);
+  return visible.map((o, i) => {
+    const full = (counts[o.id] / total) * BAR_W;
+    const width = Math.max(1, full - (i < visible.length - 1 ? GAP : 0));
+    const segment = { ...o, x, width, n: counts[o.id] };
+    x += full;
+    return segment;
+  });
+}
+
+const text = {
+  title: { es: 'Resultados de 960 partidas, por juego y jugador', en: 'Results of 960 games, by game and player' },
+  desc: {
+    es: 'Llama 3.2 3B solo pierde el 100 % de las partidas de tres en raya y de Ultimate. Con la herramienta de búsqueda, sus derrotas en tres en raya bajan al 31 %, pero en Ultimate solo gana el 8 %, frente al 90 % de la búsqueda sola. En Phantom, solo gana el 57 % y pierde el 42 %; con la búsqueda, gana el 45 % y pierde el 27 %.',
+    en: 'On its own, Llama 3.2 3B loses 100% of its games of tic-tac-toe and Ultimate. With the search tool its tic-tac-toe losses fall to 31%, but in Ultimate it wins only 8%, against 90% for the search alone. In Phantom it wins 57% and loses 42% alone; with search it wins 45% and loses 27%.',
+  },
+  note: {
+    es: '100 partidas por jugador en tres en raya y Phantom, y 40 en Ultimate. Datos: benchmark del repositorio.',
+    en: '100 games per player in tic-tac-toe and Phantom, and 40 in Ultimate. Data: the repository’s benchmark.',
+  },
+  table: { es: 'Ver los datos', en: 'View the data' },
+  game: { es: 'Juego', en: 'Game' },
+  player: { es: 'Jugador', en: 'Player' },
+  games: { es: 'Partidas', en: 'Games' },
+  of: { es: 'de', en: 'of' },
+} satisfies Record<string, Localized>;
+const id = `benchmark-${locale}`;
+---
+
+<figure class="benchmark">
+  <ul class="mb-4 flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted" aria-hidden="true">
+    {
+      outcomes.map((o) => (
+        <li class="flex items-center gap-2">
+          <span class="inline-block size-3 rounded-[3px]" style={`background:${o.fill}`} />
+          {o.name[locale]}
+        </li>
+      ))
+    }
+  </ul>
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby={`${id}-title ${id}-desc`} class="block h-auto w-full max-w-[34rem]">
+    <title id={`${id}-title`}>{text.title[locale]}</title>
+    <desc id={`${id}-desc`}>{text.desc[locale]}</desc>
+    {
+      results.map((game, g) => {
+        const top = g * (BLOCK_H + BLOCK_GAP);
+        return (
+          <g>
+            <text x="0" y={top + 15} font-size="14" font-weight="600" fill="var(--ink)">
+              {game.name[locale]}
+            </text>
+            {game.players.map((player, p) => {
+              const y = top + TITLE_H + p * ROW_H;
+              return (
+                <g>
+                  <text x="0" y={y + 14} font-size="13" fill={player.id === 'llm+search' ? 'var(--ink)' : 'var(--muted)'}>
+                    {player.name[locale]}
+                  </text>
+                  {segments(player.counts, player.games).map((s) => (
+                    <g>
+                      <rect x={s.x} y={y} width={s.width} height={BAR_H} rx="3" fill={s.fill}>
+                        <title>
+                          {`${player.name[locale]}: ${percent(s.n, player.games)} ${s.name[locale].toLowerCase()} (${s.n} ${text.of[locale]} ${player.games})`}
+                        </title>
+                      </rect>
+                      {s.width >= MIN_LABEL_W && (
+                        <text
+                          x={s.x + s.width / 2}
+                          y={y + 14}
+                          font-size="11"
+                          font-weight="600"
+                          text-anchor="middle"
+                          class={s.id === 'draw' ? 'label-neutral' : 'label-series'}
+                          aria-hidden="true"
+                        >
+                          {percent(s.n, player.games)}
+                        </text>
+                      )}
+                    </g>
+                  ))}
+                </g>
+              );
+            })}
+          </g>
+        );
+      })
+    }
+  </svg>
+  <figcaption class="mt-3 text-sm text-muted">
+    <span class="font-semibold text-ink">{text.title[locale]}.</span>{' '}
+    {text.note[locale]}
+  </figcaption>
+  <details class="mt-3 text-sm">
+    <summary class="link cursor-pointer text-muted">{text.table[locale]}</summary>
+    <div class="mt-3 overflow-x-auto">
+    <table class="w-full text-left tabular-nums">
+      <thead class="text-muted">
+        <tr>
+          <th class="py-1 pr-3 font-medium">{text.game[locale]}</th>
+          <th class="py-1 pr-3 font-medium">{text.player[locale]}</th>
+          <th class="py-1 pr-3 font-medium">{text.games[locale]}</th>
+          {outcomes.map((o) => <th class="py-1 pr-3 font-medium">{o.name[locale]}</th>)}
+        </tr>
+      </thead>
+      <tbody>
+        {
+          results.flatMap((game) =>
+            game.players.map((player) => (
+              <tr class="border-t border-line">
+                <td class="py-1 pr-3">{game.name[locale].split(',')[0]}</td>
+                <td class="py-1 pr-3">{player.name[locale]}</td>
+                <td class="py-1 pr-3">{player.games}</td>
+                {outcomes.map((o) => <td class="py-1 pr-3">{percent(player.counts[o.id], player.games)}</td>)}
+              </tr>
+            )),
+          )
+        }
+      </tbody>
+    </table>
+    </div>
+  </details>
+</figure>
+
+<style>
+  /* Gris neutro del punto medio y texto dentro de los segmentos (contraste medido en ambos modos). */
+  .benchmark {
+    --chart-neutral: #c4c4c4;
+  }
+  .label-series,
+  .label-neutral {
+    fill: #000;
+  }
+  @media (prefers-color-scheme: dark) {
+    .benchmark {
+      --chart-neutral: #4a4a4a;
+    }
+    .label-neutral {
+      fill: #fff;
+    }
+  }
+</style>

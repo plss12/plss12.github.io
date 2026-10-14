@@ -109,14 +109,14 @@ export const projects: Project[] = [
       en: 'An MCP server that puts pyplAI’s algorithms in the hands of assistants like Claude. The model plays, asks for an analysis of each position and explains its move with the numbers from the search. In Phantom, where the opponent’s stones are hidden, the analysis only uses what the player knows.',
     },
     facts: [
-      { value: { es: '6', en: '6' }, label: { es: 'herramientas MCP', en: 'MCP tools' } },
       { value: { es: '3', en: '3' }, label: { es: 'juegos, uno con información oculta', en: 'games, one with hidden information' } },
+      { value: { es: '960', en: '960' }, label: { es: 'partidas de benchmark con Llama 3.2 3B', en: 'benchmark games with Llama 3.2 3B' } },
     ],
     stack: ['Python', 'MCP', 'Pydantic', 'pyplAI'],
     // Añadir el enlace a PyPI (https://pypi.org/project/pyplai-mcp/) cuando esté publicado
     links: [{ label: github, href: 'https://github.com/plss12/pyplAI-MCP' }],
     visual: 'phantom-analysis',
-    caseStudy: false,
+    caseStudy: true,
   },
   {
     slug: 'connect-x-alphazero',

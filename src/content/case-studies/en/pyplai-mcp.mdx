@@ -1,0 +1,75 @@
+---
+title: pyplAI-MCP, pyplAI's search as a tool for any LLM
+description: Case study by Pedro Luis Soto Santos. An open-source MCP server that lets an LLM play against pyplAI's algorithms and use them as a tool, with a benchmark of 960 games played by Llama 3.2 3B running locally.
+lang: en
+project: pyplai-mcp
+---
+
+import { Image } from 'astro:assets';
+import BenchmarkChart from '@/components/visuals/BenchmarkChart.astro';
+import screenshot from '@/assets/screenshots/phantom-claude-desktop.png';
+
+## The problem
+
+Language models reason in words, but they don't search. Ask one to play Ultimate tic-tac-toe and it will explain its moves well and choose them badly. [pyplAI](/en/projects/pyplai/), my bachelor's thesis, does the opposite: it searches, but explains nothing.
+
+I wanted to bring the two together with the **Model Context Protocol (MCP)**, the standard that lets assistants like Claude use external tools: the model plays, asks pyplAI to analyse the position and explains its move with the numbers from the search.
+
+## Seven tools and a game with hidden information
+
+The server exposes pyplAI as seven tools: list the games and their rules, start a game, get the state, play, analyse the position and end the game. The key one is `analyze_position`: it runs a search from the model's position and returns its legal moves ranked by the share of simulated games they win. This is a real response in Ultimate:
+
+```json
+{
+  "algorithm": "mcts",
+  "metric": "win_rate",
+  "best_move": "B1:a3",
+  "moves": [
+    {"move": "B1:a3", "visits": 121, "value": 0.4711},
+    {"move": "B1:c1", "visits": 70, "value": 0.4357},
+    {"move": "B1:c3", "visits": 89, "value": 0.4326}
+  ],
+  "iterations": 777,
+  "seconds": 2.001
+}
+```
+
+**Phantom** is where the design matters. It is four in a row on a 4 × 4 board where you can't see your opponent's stones. A perfect-information search would read the hidden stones from the game state and cheat, so the server only offers pyplAI's ISMCTS variants, which sample where those stones could be from what the player knows. A test plays whole games and checks that nothing the player receives reveals a hidden stone.
+
+## Claude playing
+
+<figure>
+  <Image
+    src={screenshot}
+    alt="Claude Desktop during a game of Phantom: Claude calls play_move with the move c2 and then analyze_position, which recommends b3 with 61% simulated wins."
+    widths={[640, 1118]}
+    sizes="(min-width: 48rem) 48rem, 100vw"
+    class="rounded-2xl border border-line"
+  />
+  <figcaption class="mt-3 text-sm text-muted">A real game from Claude Desktop, with the tool calls expanded. The conversation is in Spanish.</figcaption>
+</figure>
+
+This is how it looks from Claude Desktop: Claude analyses each position, plays the recommended move and explains why with the numbers from the analysis. In this game of Phantom against MO-ISMCTS it won in four moves ([full conversation](https://github.com/plss12/pyplAI-MCP/blob/main/examples/phantom-claude-desktop.md)).
+
+Trying it with a real client uncovered two bugs the tests had missed. The model had no way to read the rules, which were published as an MCP resource rather than a tool, so I added `get_rules`. And at the end of some Phantom games the server described the last move wrongly; a test now reproduces that ending.
+
+## How much does search help a small model?
+
+One game is an anecdote. To measure it, I wrote an agent that acts as the MCP client and lets **Llama 3.2 3B** play unattended, served locally with Ollama on my laptop's 4 GB GPU. Four players compete in each game: Llama alone, Llama with `analyze_position`, the search alone as the ceiling and random moves as the floor. 960 games in total.
+
+<figure>
+  <BenchmarkChart locale="en" />
+</figure>
+
+- **On its own, the model plays the perfect-information games no better than chance.** It loses all 100 games of tic-tac-toe and all 40 of Ultimate. It almost never tries an illegal move: the problem is choosing, not following the rules.
+- **In tic-tac-toe, search cuts its losses from 100% to 31%.** It analysed before every move but played the recommended one only 80% of the time. In the 34 games where it followed every recommendation it drew all 34; all 31 losses came from games where it overrode the search.
+- **In Ultimate it barely improves:** it wins 8%, against 90% for the search alone. It analysed before only 55% of its moves and followed the analysis 61% of the time when it did.
+- **Phantom is different.** On its own it already wins 57% of its games, though it loses 42%. With search it loses 27%, close to the 20% of the search alone.
+
+The takeaway: **the tool helps a small model as much as the model trusts it.** The method, the numbers with confidence intervals and the code to repeat it are in the [repository's benchmark](https://github.com/plss12/pyplAI-MCP/tree/main/benchmarks).
+
+## What I learned
+
+- **A local model is infrastructure too.** Qwen3 4B kept reasoning even with reasoning turned off and took 16 minutes for one game of tic-tac-toe, so I switched to Llama 3.2 3B. Llama sometimes fell into a loop of text (one reply ran to 42,000 tokens), so I capped each reply at 512 tokens; and when Ollama briefly lost the connection to its own process, I added retries. Because results are saved game by game, every interruption resumed where it had stopped.
+- **Measure what explains the result, not just the result.** The win rate said the tool did little in Ultimate. Recording whether the model followed the recommendation explained why.
+- **Design the tools for the model.** Errors the model can fix, like an illegal move, come back as readable errors listing the legal moves. And only the protocol travels over standard output: pyplAI 1.1 added `analiza()` to return the search statistics as data instead of printing them.
