@@ -23,19 +23,20 @@ afirma sin respaldo.
 Capacidades, por orden de relevancia para el mercado (`src/data/capabilities.ts`):
 
 1. Agentes y aprendizaje por refuerzo multiagente (TFM; DDDQL, MAPPO y AlphaZero desde cero).
-2. Entornos de simulación para entrenar agentes (simulador lunar con Gymnasium).
-3. Planificación y búsqueda con redes neuronales (Connect-X AlphaZero, pyplAI).
-4. Software de IA publicado y documentado (pyplAI en PyPI).
-5. Datos en producción para modelos de IA (Minsait, −50 % de tiempo ETL).
+2. Herramientas para agentes LLM con MCP (pyplAI-MCP).
+3. Entornos de simulación para entrenar agentes (simulador lunar con Gymnasium).
+4. Planificación y búsqueda con redes neuronales (Connect-X AlphaZero, pyplAI).
+5. Software de IA publicado y documentado (pyplAI en PyPI).
+6. Datos en producción para modelos de IA (Minsait, −50 % de tiempo ETL).
 
 **Python** es el lenguaje principal y se destaca de forma natural, sin repetirlo en cada línea:
 en la presentación, en la capacidad
 «Python limpio, documentado y publicado», en la línea «Hecho con…» de cada proyecto (pyplAI:
 Python puro, sin dependencias), en la capacidad de datos (Python + ODI) y en el perfil del CV.
 
-LLMs, RAG y MCP aparecen solo como herramientas hasta que haya un proyecto que lo demuestre.
-Propuesta pendiente: un servidor MCP que exponga pyplAI como herramientas para que un agente
-LLM planifique jugadas. Cuando exista, se añade como proyecto destacado.
+MCP y los agentes LLM se respaldan con pyplAI-MCP. LLMs (en general) y RAG siguen apareciendo
+solo como herramientas hasta que haya un proyecto que lo demuestre. Siguiente paso previsto:
+medir con modelos abiertos servidos en local (Ollama) cuánto mejora su juego la búsqueda.
 
 En segundo plano: Kaggle básicos (no se muestran), Java, diseño (SolidWorks, Photoshop) y Scrum
 (solo en el CV original), Deloitte (un único logro) y la etapa internacional (una línea).
@@ -73,8 +74,13 @@ En segundo plano: Kaggle básicos (no se muestran), Java, diseño (SolidWorks, P
 2. **pyplAI** (TFG, Matrícula de Honor). Caso de estudio.
    - Biblioteca en PyPI con Minimax (alfa-beta), MCTS-UCT, SO-ISMCTS y MO-ISMCTS.
    - 8 juegos de ejemplo y algoritmo genético para la colocación inicial del Stratego.
-3. **Connect-X AlphaZero**: AlphaZero desde cero, **top 10 global**; comparativa con Rainbow DQN y PPO (Tianshou) y MCTS/Minimax (pyplAI).
-4. **Kaggle** (una línea): Store Sales, top 5 %; Spaceship Titanic, top 2 %.
+3. **pyplAI-MCP**: servidor MCP open source que expone pyplAI como herramientas para LLMs.
+   - 6 herramientas (`list_games`, `new_game`, `get_state`, `play_move`, `analyze_position`, `end_game`), el recurso `rules://{game}` y el prompt `play_game`. Salida estructurada con esquema.
+   - 3 juegos: tres en raya, Ultimate y Phantom (4,4,4), con información oculta: el análisis usa ISMCTS y un test comprueba que no se filtran fichas ocultas.
+   - Visual de la tarjeta: análisis real de MO-ISMCTS (5 s, 13 449 iteraciones) en una posición de Phantom.
+   - Pendiente de publicar (GitHub y PyPI) tras publicar pyplAI 1.1.0.
+4. **Connect-X AlphaZero**: AlphaZero desde cero, **top 10 global**; comparativa con Rainbow DQN y PPO (Tianshou) y MCTS/Minimax (pyplAI).
+5. **Kaggle** (una línea): Store Sales, top 5 %; Spaceship Titanic, top 2 %.
 
 ## Dirección de diseño y tono
 

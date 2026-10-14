@@ -51,12 +51,15 @@ En el Stratego añadí un **algoritmo genético** que busca la mejor colocación
 
 ## Resultados
 
-- Con poco tiempo de cálculo, Minimax gana a MCTS. Al dar más tiempo la ventaja se reduce hasta igualarse, porque MCTS acaba cubriendo el mismo árbol.
-- SO-ISMCTS logra una tasa de victorias muy alta contra agentes aleatorios en los juegos de información imperfecta.
-- Con las colocaciones del algoritmo genético, SO-ISMCTS gana con claridad a sí mismo con colocaciones aleatorias.
-- MO-ISMCTS iguala o supera a SO-ISMCTS en juegos con movimientos ocultos, aunque SO-ISMCTS completa alrededor de un 25 % más de iteraciones en el mismo tiempo.
+Repetí las pruebas del TFG con la versión 1.1.0 de la biblioteca, después de revisarla a fondo ([réplica completa](https://github.com/plss12/pyplAI/tree/main/experimentos/replica-tfg)):
+
+- En Ultimate Tic-Tac-Toe, con poco tiempo de cálculo, Minimax gana a MCTS: 62 % de las partidas frente a 25 %. Al dar más tiempo, la ventaja se reduce hasta igualarse.
+- SO-ISMCTS gana entre el 78 % y el 92 % de las partidas de escoba contra un agente aleatorio.
+- En Stratego, con las colocaciones del algoritmo genético, SO-ISMCTS gana el 55 % de las partidas contra sí mismo con colocaciones aleatorias, que solo gana el 5 %.
+- MO-ISMCTS supera a SO-ISMCTS en los juegos con movimientos ocultos. En Holjjak gana entre el 83 % y el 87 % de las partidas.
 
 ## Lo que aprendí
 
 - **Diseñar una API es diseñar para otros.** El reto no fue solo implementar los algoritmos, sino que alguien pueda conectarlos a su juego sin leer el código. Por eso la biblioteca incluye un manual completo y los ocho juegos de ejemplo.
+- **Los tests encuentran lo que los experimentos no ven.** Al preparar la versión 1.1.0 escribí un test para cada algoritmo y cada juego, y aparecieron fallos que el TFG no había detectado, como un blackjack en el que el algoritmo veía la carta tapada del croupier. Las conclusiones principales se mantienen, y las cifras de esta página son las de la versión corregida.
 - **La búsqueda sigue siendo muy competitiva.** Lo confirmé después en [Connect-X AlphaZero](https://github.com/plss12/Connect-X-AlphaZero): los agentes basados en pyplAI superaron a PPO y Rainbow DQN, y solo AlphaZero, que combina búsqueda con una red neuronal, los superó.

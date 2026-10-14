@@ -51,12 +51,15 @@ For Stratego I added a **genetic algorithm** that searches for the best initial 
 
 ## Results
 
-- With little computing time, Minimax beats MCTS. With more time the gap closes until they’re even, because MCTS ends up covering the same tree.
-- SO-ISMCTS achieves a very high win rate against random agents in imperfect-information games.
-- With the genetic algorithm’s layouts, SO-ISMCTS clearly beats itself playing with random layouts.
-- MO-ISMCTS matches or beats SO-ISMCTS in games with hidden moves, although SO-ISMCTS completes around 25% more iterations in the same time.
+I reran the thesis experiments on version 1.1.0 of the library, after a thorough review ([full replication](https://github.com/plss12/pyplAI/tree/main/experimentos/replica-tfg)):
+
+- In Ultimate Tic-Tac-Toe, with little computing time, Minimax beats MCTS: 62% of the games against 25%. With more time, the gap closes until they’re even.
+- SO-ISMCTS wins between 78% and 92% of Escoba games against a random agent.
+- In Stratego, with the genetic algorithm’s layouts, SO-ISMCTS wins 55% of its games against itself with random layouts, which wins only 5%.
+- MO-ISMCTS beats SO-ISMCTS in games with hidden moves. In Holjjak it wins between 83% and 87% of the games.
 
 ## What I learned
 
 - **Designing an API means designing for others.** The challenge wasn’t only implementing the algorithms, but letting someone plug them into their game without reading the source. That’s why the library ships with a full manual and the eight example games.
+- **Tests find what experiments miss.** While preparing version 1.1.0 I wrote a test for every algorithm and game, and they caught bugs the thesis hadn’t, such as a blackjack game where the algorithm could see the dealer’s face-down card. The main conclusions hold, and the figures on this page come from the fixed version.
 - **Search is still highly competitive.** I confirmed it later in [Connect-X AlphaZero](https://github.com/plss12/Connect-X-AlphaZero): the pyplAI-based agents beat PPO and Rainbow DQN, and only AlphaZero, which pairs search with a neural network, beat them.

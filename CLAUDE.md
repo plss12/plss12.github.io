@@ -11,7 +11,7 @@ Web personal de portfolio + CV para búsqueda activa de empleo como AI Engineer 
 - `docs/perfil.md` es el brief editorial: posicionamiento, capacidades por orden, proyectos, resultados reales y lista de datos que no se publican.
 - `src/data/*.ts` es lo que la web renderiza (textos ES/EN tipados). Si cambia un dato, actualizar ambos sitios.
 - Hilo conductor: **agentes que aprenden a decidir** (RL, multiagente, búsqueda + redes neuronales). El TFM es el proyecto protagonista; el TFG, el segundo.
-- **Nada se afirma sin prueba.** Toda cifra o logro debe salir de `contexto/`, de los repos o de los datos del TFM. No inventar duraciones, compromisos ni proyectos (p. ej. LLMs/MCP solo aparecen como herramientas hasta que exista un proyecto).
+- **Nada se afirma sin prueba.** Toda cifra o logro debe salir de `contexto/`, de los repos o de los datos del TFM. No inventar duraciones, compromisos ni proyectos (p. ej. RAG solo aparece como herramienta hasta que exista un proyecto).
 - Tono cercano y sencillo, en primera persona, sin caer en lo informal. Cifras concretas antes que adjetivos.
 - **Nombre del autor:** siempre completo, «Pedro Luis Soto Santos» (`profile.name`), o solo «Pedro» en la versión corta. Nunca formas intermedias como «Pedro Luis» o «Pedro Luis Soto».
 
