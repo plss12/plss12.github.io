@@ -113,10 +113,8 @@ export const projects: Project[] = [
       { value: { es: '3', en: '3' }, label: { es: 'juegos, uno con información oculta', en: 'games, one with hidden information' } },
     ],
     stack: ['Python', 'MCP', 'Pydantic', 'pyplAI'],
-    links: [
-      { label: github, href: 'https://github.com/plss12/pyplAI-MCP' },
-      { label: { es: 'Ver en PyPI', en: 'View on PyPI' }, href: 'https://pypi.org/project/pyplai-mcp/' },
-    ],
+    // Añadir el enlace a PyPI (https://pypi.org/project/pyplai-mcp/) cuando esté publicado
+    links: [{ label: github, href: 'https://github.com/plss12/pyplAI-MCP' }],
     visual: 'phantom-analysis',
     caseStudy: false,
   },

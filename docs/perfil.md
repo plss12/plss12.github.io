@@ -78,7 +78,8 @@ En segundo plano: Kaggle básicos (no se muestran), Java, diseño (SolidWorks, P
    - 6 herramientas (`list_games`, `new_game`, `get_state`, `play_move`, `analyze_position`, `end_game`), el recurso `rules://{game}` y el prompt `play_game`. Salida estructurada con esquema.
    - 3 juegos: tres en raya, Ultimate y Phantom (4,4,4), con información oculta: el análisis usa ISMCTS y un test comprueba que no se filtran fichas ocultas.
    - Visual de la tarjeta: análisis real de MO-ISMCTS (5 s, 13 449 iteraciones) en una posición de Phantom.
-   - Pendiente de publicar (GitHub y PyPI) tras publicar pyplAI 1.1.0.
+   - Publicado en GitHub (https://github.com/plss12/pyplAI-MCP); se instala con `uvx --from git+...`.
+   - Pendiente, cuando se recupere la cuenta de PyPI: publicar pyplAI 1.1.0 y pyplai-mcp en PyPI, darlo de alta en el registro oficial de MCP y añadir el enlace a PyPI en la tarjeta (`src/data/projects.ts`).
 4. **Connect-X AlphaZero**: AlphaZero desde cero, **top 10 global**; comparativa con Rainbow DQN y PPO (Tianshou) y MCTS/Minimax (pyplAI).
 5. **Kaggle** (una línea): Store Sales, top 5 %; Spaceship Titanic, top 2 %.
 
