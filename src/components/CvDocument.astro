@@ -6,7 +6,7 @@
 import { routes, type Locale, type Localized } from '@/i18n';
 import { formatMonth } from '@/i18n/format';
 import { profile } from '@/data/profile';
-import { featuredProject, projects, kaggleResults } from '@/data/projects';
+import { featuredProject, projects } from '@/data/projects';
 import { techExperience, internationalStage, type Role } from '@/data/experience';
 import { education } from '@/data/education';
 import { capabilities, toolkit } from '@/data/capabilities';
@@ -27,8 +27,6 @@ const text = {
   strengths: { es: 'Especialidad', en: 'Focus areas' },
   tools: { es: 'Herramientas', en: 'Tools' },
   languages: { es: 'Idiomas', en: 'Languages' },
-  kaggle: { es: 'Kaggle', en: 'Kaggle' },
-  portfolio: { es: 'Portfolio y casos de estudio', en: 'Portfolio and case studies' },
 } satisfies Record<string, Localized>;
 
 const period = (role: Pick<Role, 'start' | 'end'>) => `${formatMonth(role.start, locale)} – ${formatMonth(role.end, locale)}`;
@@ -74,10 +72,6 @@ const host = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\
           </div>
         ))
       }
-      <p class="cv-muted">
-        <strong>{text.kaggle[locale]}:</strong> {kaggleResults.map((k) => `${k.name}, ${k.result[locale]}`).join('; ')}.{' '}
-        {text.portfolio[locale]}: <a href={site.href}>{host(site.href)}</a>
-      </p>
     </section>
 
     <section>
@@ -164,7 +158,7 @@ const host = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\
     background: #fff;
     color: var(--ink);
     font-size: 9.2pt;
-    line-height: 1.42;
+    line-height: 1.36;
   }
 
   .cv a {

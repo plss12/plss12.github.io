@@ -25,7 +25,11 @@ const id = sectionIds.projects[locale];
     </div>
 
     <div class="mt-24 grid gap-6 md:mt-32 lg:grid-cols-2">
-      {projects.map((project) => <ProjectCard locale={locale} project={project} />)}
+      {
+        projects.map((project, i) => (
+          <ProjectCard locale={locale} project={project} wide={projects.length % 2 === 1 && i === projects.length - 1} />
+        ))
+      }
     </div>
 
     <p class="mt-10 text-muted">

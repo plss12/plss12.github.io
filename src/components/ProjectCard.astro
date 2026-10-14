@@ -9,41 +9,48 @@ import BuiltWith from '@/components/BuiltWith.astro';
 interface Props {
   locale: Locale;
   project: Project;
+  /** Ocupa las dos columnas de la cuadrícula, con el visual a la izquierda en escritorio. */
+  wide?: boolean;
 }
 
-const { locale, project } = Astro.props;
+const { locale, project, wide = false } = Astro.props;
 const t = useTranslations(locale);
 const headingId = `project-${project.slug}`;
 ---
 
-<article class="flex flex-col rounded-[1.75rem] bg-surface p-6 sm:p-10" aria-labelledby={headingId}>
-  <div class="visual flex h-64 items-center justify-center rounded-2xl bg-bg p-5 sm:h-80 sm:p-6">
+<article
+  class:list={['flex flex-col rounded-[1.75rem] bg-surface p-6 sm:p-10', wide && 'lg:col-span-2 lg:grid lg:grid-cols-2 lg:gap-12']}
+  aria-labelledby={headingId}
+>
+  <div class:list={['visual flex h-64 items-center justify-center rounded-2xl bg-bg p-5 sm:h-80 sm:p-6', wide && 'lg:h-auto lg:min-h-80']}>
     {project.visual === 'mcts-diagram' && <MctsDiagram locale={locale} />}
     {project.visual === 'phantom-analysis' && <PhantomAnalysis locale={locale} />}
     {project.visual === 'connect4-board' && <Connect4Board locale={locale} />}
   </div>
 
-  <p class="mt-8 text-base font-semibold">
-    <span translate="no">{project.name}</span>
-    <span class="block font-normal text-muted">{project.context[locale]}</span>
-  </p>
-  <h3 id={headingId} class="text-subtitle mt-4">{project.tagline[locale]}</h3>
-  <p class="mt-4 text-muted">{project.summary[locale]}</p>
-  <BuiltWith locale={locale} stack={project.stack} note={project.stackNote} class="mt-4" />
+  <div class="flex flex-1 flex-col">
+    <p class:list={['mt-8 text-base font-semibold', wide && 'lg:mt-0']}>
+      <span translate="no">{project.name}</span>
+      <span class="block font-normal text-muted">{project.context[locale]}</span>
+    </p>
+    <h3 id={headingId} class="text-subtitle mt-4">{project.tagline[locale]}</h3>
+    <p class="mt-4 text-muted">{project.summary[locale]}</p>
+    <BuiltWith locale={locale} stack={project.stack} note={project.stackNote} class="mt-4" />
 
-  <dl class="mt-8 grid grid-cols-2 gap-6 border-t border-line pt-6">
-    {
-      project.facts.map((fact) => (
-        <div class="flex flex-col-reverse justify-end gap-1">
-          <dt class="text-sm text-muted">{fact.label[locale]}</dt>
-          <dd class="text-subtitle">{fact.value[locale]}</dd>
-        </div>
-      ))
-    }
-  </dl>
+    <dl class="mt-8 grid grid-cols-2 gap-6 border-t border-line pt-6">
+      {
+        project.facts.map((fact) => (
+          <div class="flex flex-col-reverse justify-end gap-1">
+            <dt class="text-sm text-muted">{fact.label[locale]}</dt>
+            <dd class="text-subtitle">{fact.value[locale]}</dd>
+          </div>
+        ))
+      }
+    </dl>
 
-  <p class="mt-auto flex flex-wrap items-center gap-x-6 gap-y-3 pt-8">
-    {project.caseStudy && <a href={routes.caseStudy(locale, project.slug)} class="link font-semibold">{t('cta.caseStudy')}</a>}
-    {project.links.map((link) => <a href={link.href} class="link font-semibold">{link.label[locale]}</a>)}
-  </p>
+    <p class="mt-auto flex flex-wrap items-center gap-x-6 gap-y-3 pt-8">
+      {project.caseStudy && <a href={routes.caseStudy(locale, project.slug)} class="link font-semibold">{t('cta.caseStudy')}</a>}
+      {project.links.map((link) => <a href={link.href} class="link font-semibold">{link.label[locale]}</a>)}
+    </p>
+  </div>
 </article>
