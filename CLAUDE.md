@@ -56,3 +56,8 @@ Astro 7 (salida estática, sin JS de cliente) + Tailwind CSS 4 vía `@tailwindcs
 - **Imágenes:** fotos en `src/assets/photos/` (procesadas desde `contexto/Fotos`); la cabecera usa dirección de arte manual con `getImage` (retrato en móvil, panorámica en escritorio) y `fetchpriority="high"`.
 - **Despliegue:** cada push a `main` publica en GitHub Pages (https://plss12.github.io) con `.github/workflows/deploy.yml` (Node de `.nvmrc`, Chromium de Playwright para el CV, `npm run build`, `dist/`). `site` en `astro.config.mjs` y `public/robots.txt` apuntan a ese dominio; si cambia, actualizar ambos. `src/pages/404.astro` es la única página de error que admite GitHub Pages: renderiza ES y EN y un script inline mínimo (el único JS de la web) muestra la inglesa si la ruta empieza por `/en/`.
 - Astro 7 cambió APIs respecto a Astro 5: colecciones en `src/content.config.ts` con loaders, `z` desde `astro/zod` (Zod 4), fuentes con la clave `fonts` + `<Font />`, compilador en Rust que no corrige HTML inválido. Antes de usar una API, consultar la documentación actual.
+
+## Git
+
+- Commits en inglés, en imperativo y con un cuerpo que explique el porqué. Todos terminan con
+  `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`.
