@@ -63,7 +63,7 @@ Una partida es una anécdota. Para medirlo escribí un agente que hace de client
 
 - **Solo, el modelo no juega mejor que el azar en los juegos de información perfecta.** Pierde las 100 partidas de tres en raya y las 40 de Ultimate. Casi nunca intenta una jugada ilegal: el problema es elegir, no seguir las reglas.
 - **En tres en raya, la búsqueda baja sus derrotas del 100 % al 31 %.** Analizó antes de cada jugada, pero solo jugó la recomendada el 80 % de las veces. En las 34 partidas en que siguió todas las recomendaciones empató las 34; las 31 derrotas llegaron en partidas en que se apartó de ella.
-- **En Ultimate apenas mejora:** gana el 8 %, frente al 90 % de la búsqueda sola. Solo analizó antes del 55 % de sus jugadas y siguió el análisis en el 61 % de esas.
+- **En Ultimate no mejora:** no gana ninguna partida y pierde 37 de 40, mientras que la búsqueda sola gana 33 de 40. Analizó antes del 67 % de sus jugadas y siguió el análisis en el 60 % de esas, pero nunca durante una partida entera.
 - **Phantom es distinto.** Solo, ya gana el 57 % de las partidas, aunque pierde el 42 %. Con la búsqueda pierde el 27 %, cerca del 20 % de la búsqueda sola.
 
 La conclusión: **la herramienta ayuda a un modelo pequeño en la medida en que este se fía de ella.** El método, las cifras con intervalos de confianza y el código para repetirlo están en el [benchmark del repositorio](https://github.com/plss12/pyplAI-MCP/tree/main/benchmarks).

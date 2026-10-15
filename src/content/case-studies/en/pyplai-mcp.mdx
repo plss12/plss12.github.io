@@ -63,7 +63,7 @@ One game is an anecdote. To measure it, I wrote an agent that acts as the MCP cl
 
 - **On its own, the model plays the perfect-information games no better than chance.** It loses all 100 games of tic-tac-toe and all 40 of Ultimate. It almost never tries an illegal move: the problem is choosing, not following the rules.
 - **In tic-tac-toe, search cuts its losses from 100% to 31%.** It analysed before every move but played the recommended one only 80% of the time. In the 34 games where it followed every recommendation it drew all 34; all 31 losses came from games where it overrode the search.
-- **In Ultimate it barely improves:** it wins 8%, against 90% for the search alone. It analysed before only 55% of its moves and followed the analysis 61% of the time when it did.
+- **In Ultimate it does not improve:** it wins no games and loses 37 of 40, while the search alone wins 33 of 40. It analysed before 67% of its moves and followed the analysis 60% of the time when it did, but never for a whole game.
 - **Phantom is different.** On its own it already wins 57% of its games, though it loses 42%. With search it loses 27%, close to the 20% of the search alone.
 
 The takeaway: **the tool helps a small model as much as the model trusts it.** The method, the numbers with confidence intervals and the code to repeat it are in the [repository's benchmark](https://github.com/plss12/pyplAI-MCP/tree/main/benchmarks).

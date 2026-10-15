@@ -80,8 +80,8 @@ function segments(counts: Record<Outcome, number>, total: number) {
 const text = {
   title: { es: 'Resultados de 960 partidas, por juego y jugador', en: 'Results of 960 games, by game and player' },
   desc: {
-    es: 'Llama 3.2 3B solo pierde el 100 % de las partidas de tres en raya y de Ultimate. Con la herramienta de búsqueda, sus derrotas en tres en raya bajan al 31 %, pero en Ultimate solo gana el 8 %, frente al 90 % de la búsqueda sola. En Phantom, solo gana el 57 % y pierde el 42 %; con la búsqueda, gana el 45 % y pierde el 27 %.',
-    en: 'On its own, Llama 3.2 3B loses 100% of its games of tic-tac-toe and Ultimate. With the search tool its tic-tac-toe losses fall to 31%, but in Ultimate it wins only 8%, against 90% for the search alone. In Phantom it wins 57% and loses 42% alone; with search it wins 45% and loses 27%.',
+    es: 'Llama 3.2 3B solo pierde el 100 % de las partidas de tres en raya y de Ultimate. Con la herramienta de búsqueda, sus derrotas en tres en raya bajan al 31 %, pero en Ultimate no gana ninguna partida, mientras que la búsqueda sola gana 33 de 40. En Phantom, solo gana el 57 % y pierde el 42 %; con la búsqueda, gana el 45 % y pierde el 27 %.',
+    en: 'On its own, Llama 3.2 3B loses 100% of its games of tic-tac-toe and Ultimate. With the search tool its tic-tac-toe losses fall to 31%, but in Ultimate it wins no games, while the search alone wins 33 of 40. In Phantom it wins 57% and loses 42% alone; with search it wins 45% and loses 27%.',
   },
   note: {
     es: '100 partidas por jugador en tres en raya y Phantom, y 40 en Ultimate. Datos: benchmark del repositorio.',
