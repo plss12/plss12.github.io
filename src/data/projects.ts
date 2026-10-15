@@ -89,6 +89,7 @@ export const projects: Project[] = [
     links: [
       { label: github, href: 'https://github.com/plss12/pyplAI' },
       { label: { es: 'Ver en PyPI', en: 'View on PyPI' }, href: 'https://pypi.org/project/pyplAI/' },
+      { label: { es: 'Jugar contra pyplAI', en: 'Play against pyplAI' }, href: 'https://plss12.github.io/pyplai-web/' },
     ],
     visual: 'mcts-diagram',
     caseStudy: true,

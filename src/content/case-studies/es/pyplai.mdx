@@ -58,6 +58,10 @@ Repetí las pruebas del TFG con la versión 1.1.0 de la biblioteca, después de 
 - En Stratego, con las colocaciones del algoritmo genético, SO-ISMCTS gana el 55 % de las partidas contra sí mismo con colocaciones aleatorias, que solo gana el 5 %.
 - MO-ISMCTS supera a SO-ISMCTS en los juegos con movimientos ocultos. En Holjjak gana entre el 83 % y el 87 % de las partidas.
 
+## Juega contra pyplAI
+
+Para que cualquiera pueda probarla sin instalar nada, hice [pyplAI Web](https://plss12.github.io/pyplai-web/): un Ultimate Tic-Tac-Toe contra el MCTS de pyplAI, que se ejecuta en el propio navegador con Pyodide. Tiene cuatro niveles, de 25 a 6.400 simulaciones por jugada, calibrados con un torneo de 1.080 partidas entre búsquedas de distinta fuerza. También enseña qué jugadas consideró la IA y con qué porcentaje de victorias.
+
 ## Lo que aprendí
 
 - **Diseñar una API es diseñar para otros.** El reto no fue solo implementar los algoritmos, sino que alguien pueda conectarlos a su juego sin leer el código. Por eso la biblioteca incluye un manual completo y los ocho juegos de ejemplo.

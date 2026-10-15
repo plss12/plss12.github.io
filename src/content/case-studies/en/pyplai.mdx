@@ -58,6 +58,10 @@ I reran the thesis experiments on version 1.1.0 of the library, after a thorough
 - In Stratego, with the genetic algorithm’s layouts, SO-ISMCTS wins 55% of its games against itself with random layouts, which wins only 5%.
 - MO-ISMCTS beats SO-ISMCTS in games with hidden moves. In Holjjak it wins between 83% and 87% of the games.
 
+## Play against pyplAI
+
+So that anyone can try it without installing anything, I built [pyplAI Web](https://plss12.github.io/pyplai-web/en/): Ultimate tic-tac-toe against pyplAI's MCTS, running in the browser itself with Pyodide. It has four levels, from 25 to 6,400 simulations per move, calibrated with a tournament of 1,080 games between searches of different strength. It can also show which moves the computer considered and how often each one won.
+
 ## What I learned
 
 - **Designing an API means designing for others.** The challenge wasn’t only implementing the algorithms, but letting someone plug them into their game without reading the source. That’s why the library ships with a full manual and the eight example games.
