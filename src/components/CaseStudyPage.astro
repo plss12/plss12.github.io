@@ -35,6 +35,7 @@ const schema = {
   description={entry.data.description}
   alternates={alternates}
   ogType="article"
+  ogImage={{ src: routes.ogImage(locale, project.slug), alt: `${project.name}. ${project.tagline[locale]}` }}
   schema={schema}
 >
   <article>

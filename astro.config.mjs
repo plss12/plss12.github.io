@@ -60,8 +60,8 @@ export default defineConfig({
   integrations: [
     mdx(),
     sitemap({
-      // El CV imprimible es una vista auxiliar: no se indexa.
-      filter: (page) => !/\/cv\/?$/.test(new URL(page).pathname),
+      // El CV imprimible y las plantillas de las imágenes Open Graph son vistas auxiliares: no se indexan.
+      filter: (page) => !/\/cv\/?$|^\/og\//.test(new URL(page).pathname),
       i18n: {
         defaultLocale: 'es',
         locales: { es: 'es-ES', en: 'en' },

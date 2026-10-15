@@ -15,6 +15,8 @@ interface Props {
   alternates?: Localized;
   noindex?: boolean;
   ogType?: 'website' | 'profile' | 'article';
+  /** Imagen Open Graph propia (1200 × 630); por defecto, la de la portada con la foto. */
+  ogImage?: { src: string; alt: string };
   /** Datos estructurados adicionales (JSON-LD). */
   schema?: Record<string, unknown>;
   /** La portada pinta su propia cabecera oscura bajo la barra. */
@@ -30,6 +32,7 @@ const {
   alternates = { es: routes.home('es'), en: routes.home('en') },
   noindex = false,
   ogType = 'profile',
+  ogImage,
   schema,
   overlayHeader = false,
   bare = false,
@@ -39,6 +42,10 @@ const t = useTranslations(locale);
 const pageTitle = title ? `${title} | ${profile.name}` : t('meta.title');
 const pageDescription = description ?? t('meta.description');
 const canonical = new URL(alternates[locale], Astro.site);
+const image = ogImage ?? {
+  src: locale === 'es' ? '/og.jpg' : '/og-en.jpg',
+  alt: `${profile.name}. ${profile.headline[locale]}`,
+};
 
 const personSchema = {
   '@context': 'https://schema.org',
@@ -82,8 +89,8 @@ const personSchema = {
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={ogLocale[locale]} />
     <meta property="og:locale:alternate" content={ogLocale[otherLocale(locale)]} />
-    <meta property="og:image" content={new URL(locale === 'es' ? '/og.jpg' : '/og-en.jpg', Astro.site)} />
-    <meta property="og:image:alt" content={`${profile.name}. ${profile.headline[locale]}`} />
+    <meta property="og:image" content={new URL(image.src, Astro.site)} />
+    <meta property="og:image:alt" content={image.alt} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />

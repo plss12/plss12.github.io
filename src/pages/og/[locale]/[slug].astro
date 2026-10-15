@@ -1,0 +1,99 @@
+---
+/*
+ * Plantilla de la imagen Open Graph de cada caso de estudio (1200 × 630).
+ * No es una página pública: scripts/og-images.mjs la captura tras el build, guarda
+ * dist/og/<locale>/<slug>.jpg y borra el HTML. Se renderiza en modo oscuro.
+ */
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import LunarMap from '@/components/visuals/LunarMap.astro';
+import MctsDiagram from '@/components/visuals/MctsDiagram.astro';
+import PhantomAnalysis from '@/components/visuals/PhantomAnalysis.astro';
+import { featuredProject, projects, type Project } from '@/data/projects';
+import { profile } from '@/data/profile';
+import { routes, type Locale } from '@/i18n';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('caseStudies');
+  return entries.map((entry) => ({ params: { locale: entry.data.lang, slug: entry.data.project } }));
+}
+
+const { locale, slug } = Astro.params as { locale: Locale; slug: string };
+const project = [featuredProject, ...projects].find((p) => p.slug === slug) as Project;
+const site = new URL(routes.home(locale), Astro.site).host;
+---
+
+<BaseLayout locale={locale} title={project.name} alternates={{ es: `/og/es/${slug}/`, en: `/og/en/${slug}/` }} noindex bare>
+  <div class="og bg-stage text-stage-ink">
+    <div class="og-copy">
+      <p class="og-name" translate="no">{project.name}</p>
+      <p class="og-tagline">{project.tagline[locale]}</p>
+      <p class="og-context text-stage-muted">{project.context[locale]}</p>
+      <p class="og-author">
+        {profile.name}
+        <span class="block font-normal text-stage-muted">{site}</span>
+      </p>
+    </div>
+    <div class="og-visual">
+      {slug === 'lunar-rover-madrl' && <LunarMap locale={locale} mode="informed" />}
+      {slug === 'pyplai' && <MctsDiagram locale={locale} />}
+      {slug === 'pyplai-mcp' && <PhantomAnalysis locale={locale} />}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .og {
+    display: grid;
+    grid-template-columns: 1fr 30rem;
+    gap: 4rem;
+    align-items: center;
+    width: 1200px;
+    height: 630px;
+    padding: 4rem 4.5rem;
+    overflow: hidden;
+  }
+
+  .og-copy {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .og-name {
+    font-size: 1.75rem;
+    font-weight: 600;
+  }
+
+  .og-tagline {
+    margin-top: 1.25rem;
+    font-size: 4.5rem;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    font-stretch: 75%;
+    text-wrap: balance;
+  }
+
+  .og-context {
+    margin-top: 1.5rem;
+    font-size: 1.5rem;
+  }
+
+  .og-author {
+    margin-top: auto;
+    font-size: 1.375rem;
+    font-weight: 600;
+  }
+
+  .og-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30rem;
+  }
+
+  .og-visual > :global(*) {
+    max-height: 100%;
+  }
+</style>

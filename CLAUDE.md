@@ -36,7 +36,7 @@ La carpeta `contexto/` (ignorada por git) contiene el material original: `CV.pdf
 ## Comandos
 
 - `npm run dev`: servidor de desarrollo en http://localhost:4321.
-- `npm run build`: `astro check` (tipos), build estático en `dist/` y generación de los PDF del CV (`scripts/cv-pdf.mjs`, requiere Chromium de Playwright: `npx playwright install chromium`).
+- `npm run build`: `astro check` (tipos), build estático en `dist/`, generación de los PDF del CV (`scripts/cv-pdf.mjs`) y de las imágenes Open Graph de los casos de estudio (`scripts/og-images.mjs`). Ambos scripts sirven `dist/` con `scripts/serve-dist.mjs` y requieren Chromium de Playwright: `npx playwright install chromium`.
 - `npm run preview`: sirve el build.
 - `npm run check`: solo comprobación de tipos.
 - `npm run screenshots`: capturas de revisión con Playwright.
@@ -52,7 +52,8 @@ Astro 7 (salida estática, sin JS de cliente) + Tailwind CSS 4 vía `@tailwindcs
 - **Portada:** `Home.astro` monta `Hero`, `Proofs`, `Projects` (`FeaturedProject` + `ProjectCard`), `Capabilities`, `Experience`, `Education` y `Contact`.
 - **Casos de estudio:** colección `caseStudies` (`src/content.config.ts`), un MDX por idioma en `src/content/case-studies/{es,en}/<slug>.mdx`. Rutas `/proyectos/<slug>/` y `/en/projects/<slug>/` con `CaseStudyPage.astro`; la cabecera sale de `src/data/projects.ts`.
 - **CV:** `/cv/` y `/en/cv/` (`CvDocument.astro`, `noindex`, excluidas del sitemap) se imprimen a `dist/cv/pedro-luis-soto-santos-cv-{es,en}.pdf` tras el build. Debe caber en una página A4.
-- **SEO:** `BaseLayout.astro` (props `title`, `description`, `alternates`, `noindex`, `schema`, `bare`) gestiona canonical, `hreflang`, Open Graph (`public/og.jpg`, `og-en.jpg`) y JSON-LD. Sitemap con `@astrojs/sitemap`.
+- **SEO:** `BaseLayout.astro` (props `title`, `description`, `alternates`, `noindex`, `ogType`, `ogImage`, `schema`, `bare`) gestiona canonical, `hreflang`, Open Graph y JSON-LD. Sitemap con `@astrojs/sitemap`.
+- **Imágenes Open Graph:** la portada usa `public/og.jpg` y `og-en.jpg` (foto + titular). Cada caso de estudio tiene la suya, `/og/<locale>/<slug>.jpg` (`routes.ogImage`). Se generan en cada build: `src/pages/og/[locale]/[slug].astro` es una plantilla de 1200 × 630 (nombre, `tagline` y `context` del proyecto y su visual: `LunarMap`, `MctsDiagram` o `PhantomAnalysis`), y `scripts/og-images.mjs` la captura en modo oscuro y borra el HTML para que no se publique. Las plantillas están excluidas del sitemap. Un caso de estudio nuevo necesita su visual en la plantilla.
 - **Imágenes:** fotos en `src/assets/photos/` (procesadas desde `contexto/Fotos`); la cabecera usa dirección de arte manual con `getImage` (retrato en móvil, panorámica en escritorio) y `fetchpriority="high"`.
 - **Despliegue:** cada push a `main` publica en GitHub Pages (https://plss12.github.io) con `.github/workflows/deploy.yml` (Node de `.nvmrc`, Chromium de Playwright para el CV, `npm run build`, `dist/`). `site` en `astro.config.mjs` y `public/robots.txt` apuntan a ese dominio; si cambia, actualizar ambos. `src/pages/404.astro` es la única página de error que admite GitHub Pages: renderiza ES y EN y un script inline mínimo (el único JS de la web) muestra la inglesa si la ruta empieza por `/en/`.
 - Astro 7 cambió APIs respecto a Astro 5: colecciones en `src/content.config.ts` con loaders, `z` desde `astro/zod` (Zod 4), fuentes con la clave `fonts` + `<Font />`, compilador en Rust que no corrige HTML inválido. Antes de usar una API, consultar la documentación actual.

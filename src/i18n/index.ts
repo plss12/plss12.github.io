@@ -21,6 +21,8 @@ export const routes = {
     `${prefix(locale)}/${locale === 'es' ? 'proyectos' : 'projects'}/${slug}/`,
   cv: (locale: Locale) => `${prefix(locale)}/cv/`,
   cvPdf: (locale: Locale) => `/cv/pedro-luis-soto-santos-cv-${locale}.pdf`,
+  /** Imagen Open Graph de un caso de estudio (la genera scripts/og-images.mjs tras el build). */
+  ogImage: (locale: Locale, slug: string) => `/og/${locale}/${slug}.jpg`,
 };
 
 /** Identificadores de las secciones de la portada (anclas legibles en cada idioma). */
