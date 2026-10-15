@@ -31,12 +31,12 @@ Web personal de portfolio + CV para búsqueda activa de empleo como AI Engineer 
 
 ## Contexto personal
 
-La carpeta `contexto/` (ignorada por git) contiene el material original: `CV.pdf`, `TFG.pdf`, `TFM.pdf`, `notas.md` y `Fotos/`. Ya está resumida en `docs/perfil.md`; solo hay que volver a ella para ampliar detalles. No publicar el teléfono ni los PDF originales; el email sí es público. GitHub del autor: `plss12`.
+La carpeta `contexto/` (ignorada por git) contiene el material original: los CV en PDF (`CV Pedro Soto - ES.pdf` y `- EN.pdf`), `TFG.pdf`, `TFM.pdf`, `notas.md` y `Fotos/`. Ya está resumida en `docs/perfil.md`; solo hay que volver a ella para ampliar detalles. Solo se publican los dos CV (con teléfono, decisión de Pedro); el resto de PDF, no. El email es público. GitHub del autor: `plss12`.
 
 ## Comandos
 
 - `npm run dev`: servidor de desarrollo en http://localhost:4321.
-- `npm run build`: `astro check` (tipos), build estático en `dist/`, generación de los PDF del CV (`scripts/cv-pdf.mjs`) y de las imágenes Open Graph de los casos de estudio (`scripts/og-images.mjs`). Ambos scripts sirven `dist/` con `scripts/serve-dist.mjs` y requieren Chromium de Playwright: `npx playwright install chromium`.
+- `npm run build`: `astro check` (tipos), build estático en `dist/`, generación de las imágenes Open Graph de los casos de estudio (`scripts/og-images.mjs`), que sirve `dist/` con `scripts/serve-dist.mjs` y requiere Chromium de Playwright: `npx playwright install chromium`.
 - `npm run preview`: sirve el build.
 - `npm run check`: solo comprobación de tipos.
 - `npm run screenshots`: capturas de revisión con Playwright.
@@ -47,16 +47,17 @@ Requiere Node >= 22.12. En Git Bash, prefijar con `MSYS_NO_PATHCONV=1` los coman
 
 Astro 7 (salida estática, sin JS de cliente) + Tailwind CSS 4 vía `@tailwindcss/vite` + MDX. TypeScript en modo `strictest`, con el alias `@/` → `src/`.
 
-- **i18n:** `es` por defecto sin prefijo (`/`), `en` en `/en/`. `src/i18n/index.ts` define `Locale`, `Localized<T>`, `routes` (home, caso de estudio, CV y PDF), `sectionIds`/`sectionHref` (anclas por idioma) y los textos de interfaz (`ui` + `useTranslations`). `src/i18n/format.ts` formatea fechas con `Intl`. Cada texto es un `Localized`: el compilador exige traducirlo todo.
+- **i18n:** `es` por defecto sin prefijo (`/`), `en` en `/en/`. `src/i18n/index.ts` define `Locale`, `Localized<T>`, `routes` (home, caso de estudio, PDF del CV e imagen Open Graph), `sectionIds`/`sectionHref` (anclas por idioma) y los textos de interfaz (`ui` + `useTranslations`). `src/i18n/format.ts` formatea fechas con `Intl`. Cada texto es un `Localized`: el compilador exige traducirlo todo.
 - **Datos:** `src/data/` contiene `profile`, `highlights`, `projects` (TFM destacado, proyectos y Kaggle), `capabilities` (evidencia enlazada a GitHub/PyPI), `experience` (incluida la etapa internacional), `education`, `lunar-scenario` (escenario real del TFM en dos modos: `exploring`, figura 5.9, e `informed`, figura 5.10) y `metrics/*.csv` (métricas reales de entrenamiento).
 - **Portada:** `Home.astro` monta `Hero`, `Proofs`, `Projects` (`FeaturedProject` + `ProjectCard`), `Capabilities`, `Experience`, `Education` y `Contact`.
 - **Casos de estudio:** colección `caseStudies` (`src/content.config.ts`), un MDX por idioma en `src/content/case-studies/{es,en}/<slug>.mdx`. Rutas `/proyectos/<slug>/` y `/en/projects/<slug>/` con `CaseStudyPage.astro`; la cabecera sale de `src/data/projects.ts`.
-- **CV:** `/cv/` y `/en/cv/` (`CvDocument.astro`, `noindex`, excluidas del sitemap) se imprimen a `dist/cv/pedro-luis-soto-santos-cv-{es,en}.pdf` tras el build. Debe caber en una página A4.
+- **CV:** PDF hechos por Pedro (optimizados para reclutadores, no se generan con los datos de la web) en `public/cv/pedro-luis-soto-santos-cv-{es,en}.pdf`, enlazados desde la cabecera y el contacto (`routes.cvPdf`). Para una versión nueva, copiar el PDF de `contexto/` encima con el mismo nombre.
 - **SEO:** `BaseLayout.astro` (props `title`, `description`, `alternates`, `noindex`, `ogType`, `ogImage`, `schema`, `bare`) gestiona canonical, `hreflang`, Open Graph y JSON-LD. Sitemap con `@astrojs/sitemap`.
 - **Imágenes Open Graph:** la portada usa `public/og.jpg` y `og-en.jpg` (foto + titular). Cada caso de estudio tiene la suya, `/og/<locale>/<slug>.jpg` (`routes.ogImage`). Se generan en cada build: `src/pages/og/[locale]/[slug].astro` es una plantilla de 1200 × 630 (nombre, `tagline` y `context` del proyecto y su visual: `LunarMap`, `MctsDiagram` o `PhantomAnalysis`), y `scripts/og-images.mjs` la captura en modo oscuro y borra el HTML para que no se publique. Las plantillas están excluidas del sitemap. Un caso de estudio nuevo necesita su visual en la plantilla.
 - **Imágenes:** fotos en `src/assets/photos/` (procesadas desde `contexto/Fotos`); la cabecera usa dirección de arte manual con `getImage` (retrato en móvil, panorámica en escritorio) y `fetchpriority="high"`.
-- **Despliegue:** cada push a `main` publica en GitHub Pages (https://plss12.github.io) con `.github/workflows/deploy.yml` (Node de `.nvmrc`, Chromium de Playwright para el CV, `npm run build`, `dist/`). `site` en `astro.config.mjs` y `public/robots.txt` apuntan a ese dominio; si cambia, actualizar ambos. `src/pages/404.astro` es la única página de error que admite GitHub Pages: renderiza ES y EN y un script inline mínimo (el único JS de la web) muestra la inglesa si la ruta empieza por `/en/`.
+- **Despliegue:** cada push a `main` publica en GitHub Pages (https://plss12.github.io) con `.github/workflows/deploy.yml` (Node de `.nvmrc`, Chromium de Playwright para las imágenes Open Graph, `npm run build`, `dist/`). `site` en `astro.config.mjs` y `public/robots.txt` apuntan a ese dominio; si cambia, actualizar ambos. `src/pages/404.astro` es la única página de error que admite GitHub Pages: renderiza ES y EN y un script inline mínimo (el único JS de la web) muestra la inglesa si la ruta empieza por `/en/`.
 - Astro 7 cambió APIs respecto a Astro 5: colecciones en `src/content.config.ts` con loaders, `z` desde `astro/zod` (Zod 4), fuentes con la clave `fonts` + `<Font />`, compilador en Rust que no corrige HTML inválido. Antes de usar una API, consultar la documentación actual.
+- **Keep it simple:** lo que no se usa se borra (componentes, páginas, scripts, datos, props, textos de interfaz), también lo que deja de usarse tras un cambio. Nada se guarda «por si acaso»: queda en el historial de git.
 
 ## Git
 

@@ -19,7 +19,7 @@ export const routes = {
   home: (locale: Locale) => `${prefix(locale)}/`,
   caseStudy: (locale: Locale, slug: string) =>
     `${prefix(locale)}/${locale === 'es' ? 'proyectos' : 'projects'}/${slug}/`,
-  cv: (locale: Locale) => `${prefix(locale)}/cv/`,
+  /** CV en PDF: lo sube el autor a public/cv/, no se genera en el build. */
   cvPdf: (locale: Locale) => `/cv/pedro-luis-soto-santos-cv-${locale}.pdf`,
   /** Imagen Open Graph de un caso de estudio (la genera scripts/og-images.mjs tras el build). */
   ogImage: (locale: Locale, slug: string) => `/og/${locale}/${slug}.jpg`,
@@ -101,7 +101,6 @@ export const ui = {
   'chart.step': { es: 'Pasos de entrenamiento', en: 'Training steps' },
   'caseStudy.tableOfContents': { es: 'En esta página', en: 'On this page' },
   'caseStudy.links': { es: 'Enlaces', en: 'Links' },
-  'cv.title': { es: 'Currículum', en: 'Résumé' },
 } satisfies Record<string, Localized>;
 
 export type UiKey = keyof typeof ui;

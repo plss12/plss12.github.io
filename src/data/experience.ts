@@ -50,7 +50,7 @@ export const techExperience: Role[] = [
   },
 ];
 
-/** Resumen de la etapa internacional, presentado en la portada y en el CV como una etapa más. */
+/** Resumen de la etapa internacional, presentado en la portada como una etapa más. */
 export const internationalStage = {
   title: { es: 'Etapa internacional', en: 'International stage' } satisfies Localized,
   location: { es: 'Australia y España', en: 'Australia and Spain' } satisfies Localized,
@@ -59,11 +59,6 @@ export const internationalStage = {
   intro: {
     es: 'Una etapa planificada para llevar mi inglés a nivel C1 y desarrollar habilidades de liderazgo, antes de volver de lleno a la IA.',
     en: 'A planned stage to take my English to C1 and build leadership skills, before returning full-time to AI.',
-  } satisfies Localized,
-  /** Versión de una línea para el CV, que debe caber en una página. */
-  short: {
-    es: 'Front Office Assistant en Accor (Brisbane, Australia) y monitor de inmersión lingüística en InterWay (España), íntegramente en inglés. Etapa planificada para alcanzar el C1 y desarrollar liderazgo.',
-    en: 'Front Office Assistant at Accor (Brisbane, Australia) and English immersion counselor at InterWay (Spain), working entirely in English. A planned stage to reach C1 and build leadership skills.',
   } satisfies Localized,
   highlights: [
     {

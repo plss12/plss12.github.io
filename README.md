@@ -14,7 +14,7 @@ Personal portfolio and CV of **Pedro Luis Soto Santos**, AI Engineer focused on 
 - **Content separated from presentation**: all profile data lives in typed modules under `src/data/`.
 - **Real data, drawn in the site's style**: the master's thesis training chart is built from the published CSV metrics, and the test-scenario map reproduces the real routes of the trained agents.
 - **Case studies in MDX** for the master's and bachelor's theses.
-- **One-page CV generated from the same data**, printed to PDF in both languages at build time.
+- **Downloadable CV** in both languages, as recruiter-ready PDFs kept in `public/cv/`.
 - **Light and dark themes** following the system preference.
 
 Lighthouse on the live site: 98–100 Performance and 100 Accessibility, Best Practices and SEO; CLS 0.
@@ -27,7 +27,7 @@ Lighthouse on the live site: 98–100 Performance and 100 Accessibility, Best Pr
 | Styling | [Tailwind CSS 4](https://tailwindcss.com) via `@tailwindcss/vite` |
 | Content | MDX content collections |
 | Typeface | [Instrument Sans](https://fonts.google.com/specimen/Instrument+Sans) variable, self-hosted |
-| Tooling | Playwright (CV PDFs, Open Graph images and visual review screenshots) |
+| Tooling | Playwright (Open Graph images and visual review screenshots) |
 | Language | TypeScript (`strictest`) |
 | SEO | `@astrojs/sitemap` with i18n |
 
@@ -43,12 +43,12 @@ npm run dev       # http://localhost:4321
 | Command | Description |
 | --- | --- |
 | `npm run dev` | Start the dev server |
-| `npm run build` | Type-check, build the static site into `dist/`, print the CV PDFs and render the case studies' Open Graph images |
+| `npm run build` | Type-check, build the static site into `dist/` and render the case studies' Open Graph images |
 | `npm run preview` | Preview the production build locally |
 | `npm run check` | Type-check only |
 | `npm run screenshots` | Capture review screenshots (mobile, tablet, desktop; light and dark) |
 
-The CV PDFs and the Open Graph images need Playwright's Chromium: `npx playwright install chromium`.
+The Open Graph images need Playwright's Chromium: `npx playwright install chromium`.
 
 ## Project structure
 
@@ -60,9 +60,9 @@ src/
 ├── data/         # Profile, projects, capabilities, experience, education (ES/EN) + thesis metrics
 ├── i18n/         # Locales, routes, UI strings and formatters
 ├── layouts/      # BaseLayout: <head>, SEO and structured data
-├── pages/        # /, /en/, case studies, printable CV and Open Graph templates
+├── pages/        # /, /en/, case studies and Open Graph templates
 └── styles/       # Design tokens and global CSS
-scripts/          # CV PDF and Open Graph image generation, and screenshot tooling
+scripts/          # Open Graph image generation and screenshot tooling
 docs/
 └── perfil.md     # Editorial brief the site content is based on
 ```
@@ -72,9 +72,9 @@ docs/
 Edit the files in `src/data/`. Each text field takes both languages:
 
 ```ts
-summary: {
-  es: 'Ingeniero de software con máster en Inteligencia Artificial…',
-  en: 'Software engineer with a Master’s in Artificial Intelligence…',
+intro: {
+  es: 'Soy Pedro, ingeniero de IA especializado en Python…',
+  en: 'I’m Pedro, an AI engineer focused on Python…',
 },
 ```
 
@@ -82,7 +82,7 @@ Spanish is served at `/` and English at `/en/`. Both are configured in `astro.co
 
 ## Deployment
 
-Every push to `main` deploys to **GitHub Pages** through [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml): it installs dependencies and Playwright's Chromium, runs `npm run build` (type check, static build, CV PDFs and Open Graph images) and publishes `dist/`.
+Every push to `main` deploys to **GitHub Pages** through [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml): it installs dependencies and Playwright's Chromium, runs `npm run build` (type check, static build and Open Graph images) and publishes `dist/`.
 
 ## License
 

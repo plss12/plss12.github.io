@@ -27,7 +27,7 @@ jobs:
 
       - run: npm ci
 
-      # Chromium de Playwright: necesario para generar los PDF del CV en el build.
+      # Chromium de Playwright: necesario para generar las imágenes Open Graph en el build.
       - name: Cache Playwright browsers
         uses: actions/cache@v6
         with:
