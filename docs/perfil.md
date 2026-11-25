@@ -81,8 +81,7 @@ En segundo plano: Kaggle básicos (no se muestran), Java, diseño (SolidWorks, P
    - Demo: partida de Phantom contra MO-ISMCTS jugada por Claude desde Claude Desktop (tablas); destapó dos fallos del servidor, corregidos en el commit 23ca07c.
    - 3 juegos: tres en raya, Ultimate y Phantom (4,4,4), con información oculta: el análisis usa ISMCTS y un test comprueba que no se filtran fichas ocultas.
    - Visual de la tarjeta: análisis real de MO-ISMCTS (5 s, 13 449 iteraciones) en una posición de Phantom.
-   - Publicado en GitHub (https://github.com/plss12/pyplAI-MCP); se instala con `uvx --from git+...`.
-   - Pendiente, cuando se recupere la cuenta de PyPI: publicar pyplAI 1.1.0 y pyplai-mcp en PyPI, darlo de alta en el registro oficial de MCP y añadir el enlace a PyPI en la tarjeta (`src/data/projects.ts`).
+   - Publicado en GitHub (https://github.com/plss12/pyplAI-MCP), en PyPI (https://pypi.org/project/pyplai-mcp/, 0.1.0 el 25-11-2026, sobre pyplAI 1.1.0 de PyPI) y en el registro oficial de MCP como `io.github.plss12/pyplai-mcp`. Se instala con `uvx pyplai-mcp`. La tarjeta enlaza a GitHub y a PyPI.
 4. **Connect-X AlphaZero**: AlphaZero desde cero, **top 10 global**; comparativa con Rainbow DQN y PPO (Tianshou) y MCTS/Minimax (pyplAI).
 5. **Kaggle** (una línea): Store Sales, top 5 %; Spaceship Titanic, top 2 %.
 

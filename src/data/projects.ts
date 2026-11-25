@@ -114,8 +114,10 @@ export const projects: Project[] = [
       { value: { es: '960', en: '960' }, label: { es: 'partidas de benchmark con Llama 3.2 3B', en: 'benchmark games with Llama 3.2 3B' } },
     ],
     stack: ['Python', 'MCP', 'Pydantic', 'pyplAI'],
-    // Añadir el enlace a PyPI (https://pypi.org/project/pyplai-mcp/) cuando esté publicado
-    links: [{ label: github, href: 'https://github.com/plss12/pyplAI-MCP' }],
+    links: [
+      { label: github, href: 'https://github.com/plss12/pyplAI-MCP' },
+      { label: { es: 'Ver en PyPI', en: 'View on PyPI' }, href: 'https://pypi.org/project/pyplai-mcp/' },
+    ],
     visual: 'phantom-analysis',
     caseStudy: true,
   },
